@@ -33,39 +33,75 @@ def dashboard():
     ...
 
 # This is the login route for the project
-@app.route("/login")
+@app.route("/login", method = ["GET", "POST"])
 def login():
-    ...
+    # if method is GET
+    if request.method == "GET":
+        return render_template("login.html")
+    # if method is POST
+    else: 
+        ...
 
 # This is the register route
-@app.route("/register")
+@app.route("/register", method = ["GET", "POST"])
 def register():
-    ...
+    # if method is GET
+    if request.method == "GET":
+        return render_template("register.html")
+    # if method is POST
+    else:
+        ...
 
 # This is the trends route to show trends 
 @app.route("/trends")
 def trends():
-    ...
+    # if method is GET
+    if request.method == "GET":
+        return render_template("trends.html")
+    # if method is POST
+    else:
+        ...
 
 # This is the route to open a writing space
 @app.route("/space")
 def space():
-    ...
+    # if method is GET
+    if request.method == "GET":
+        return render_template("space.html")
+    # if method is POST
+    else:
+        ...
 
 # This is the route for stats page
 @app.route("/stats")
 def stats():
-    ...
+    # if method is GET
+    if request.method == "GET":
+        return render_template("stats.html")
+    # if method is POST
+    else:
+        ...
 
 # This is the history route
 @app.route("/history")
 def history():
-    ...
+    # if method is GET
+    if request.method == "GET":
+        return render_template("history.html")
+    # if method is POST
+    else:
+        ...
 
 # This is the sharing route for the entries if needed
 @app.route("/share")
 def share():
-    ...
-
+    # if method is GET
+    if request.method == "GET":
+        return render_template("share.html")
+    # if method is POST
+    else:
+        ...
+    
+# Calling the app.py
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=True)
