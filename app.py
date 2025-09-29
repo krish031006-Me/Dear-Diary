@@ -4,7 +4,7 @@
 # Including all the libraries
 from flask import Flask, render_template, Session, request, redirect, flash
 from CS50 import SQL
-
+from helpers import login_required
 # Initialising the Flask app
 app = Flask(__name__)
 app.debug = True
@@ -54,6 +54,7 @@ def register():
 
 # This is the trends route to show trends 
 @app.route("/trends")
+@login_required
 def trends():
     # if method is GET
     if request.method == "GET":
@@ -64,6 +65,7 @@ def trends():
 
 # This is the route to open a writing space
 @app.route("/space")
+@login_required
 def space():
     # if method is GET
     if request.method == "GET":
@@ -74,6 +76,7 @@ def space():
 
 # This is the route for stats page
 @app.route("/stats")
+@login_required
 def stats():
     # if method is GET
     if request.method == "GET":
@@ -84,6 +87,7 @@ def stats():
 
 # This is the history route
 @app.route("/history")
+@login_required
 def history():
     # if method is GET
     if request.method == "GET":
@@ -94,6 +98,7 @@ def history():
 
 # This is the sharing route for the entries if needed
 @app.route("/share")
+@login_required
 def share():
     # if method is GET
     if request.method == "GET":
