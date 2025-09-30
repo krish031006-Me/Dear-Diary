@@ -94,6 +94,7 @@ def register():
         users = db.execute("SELECT * FROM users")
         # a bit of error checking 
         if users == []:
+            
             emails = []
         # if the user exists
         else:
