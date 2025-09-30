@@ -1,8 +1,9 @@
 """ This is the helpers file which will contain all the supporting function for the web app"""
 
 # importing the necessary files
-from flask import Flask, session, redirect
+from flask import session, redirect
 from functools import wraps
+from werkzeug.security import check_password_hash, generate_password_hash
 
 # This is the function to check if the user is logged in or not 
 def login_required(f):
@@ -16,3 +17,7 @@ def login_required(f):
             return f(*args, **kwargs)
     return decorated_function
         
+# This is the function for password hashing
+def hashing(password):
+    # Converting the passoword to a hashed password
+    return generate_password_hash(password)
