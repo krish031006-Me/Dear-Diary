@@ -4,7 +4,9 @@
 # Including all the libraries
 from flask import Flask, render_template, Session, request, redirect, flash
 from CS50 import SQL
-from helpers import login_required
+from helpers import login_required, hashing
+from werkzeug.security import check_password_hash, generate_password_hash
+import re
 # Initialising the Flask app
 app = Flask(__name__)
 app.debug = True
@@ -41,7 +43,6 @@ def login():
     # if method is POST
     else: 
         ...
-
 # This is the register route
 @app.route("/register", method = ["GET", "POST"])
 def register():
@@ -50,8 +51,45 @@ def register():
         return render_template("register.html")
     # if method is POST
     else:
-        ...
+        # getting all the values submitted by the user
+        email, username, password = request.get("name").lower().strip(), request.get("email").lower().strip(), request.get("password").lower().strip()
+        # Checking for the fields to be filled
+        if not any(email, username, password):
+            flash("Invalid credentials.")
+            return redirect("/register")
 
+        # getting all the users
+        users = db.execute("SELECT * FROM users")
+
+        # using regular expression to check for valid email pattern
+        match = re.match(r"^[\w!#$%&'\*\+-/=\?\^_`{|}~|]+@[A-Za-z0-9-]{1,63}\..+", email, flags=re.IGNORECASE)
+        if match == None: # if there is no match
+            flash("Entered email is not valid.")
+            return redirect("/register")
+
+        # the email list
+        emails = [email for user in users for email in user.get("email", "")]
+        # checking if the email is unique
+        if email in emails:
+            flash("Entered email is already in use. Please Log In")
+            return redirect("/register")
+        
+        # if the email is totally good
+        else:
+            # Inserting the data as a new user with a bit of error checking
+            try:
+                db.execute("INSERT INTO users (email, username, password) VALUES(?, ?, ?)", email, username, hashing(password))
+            except Exception as e:
+                flash("Email already in use")
+                return redirect("/register")
+
+            # fetching the id for the user
+            user_id = db.execute("SELECT user_id FROM users WHERE email = ? AND password = ?", email, password);
+            Session["user_id"] = user_id[0]["user_id"] # setting it up for sessions
+            flash("Registered successfully")
+            # returning to the dashboard
+            return redirect("/")
+            
 # This is the trends route to show trends 
 @app.route("/trends")
 @login_required
