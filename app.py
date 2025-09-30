@@ -42,7 +42,39 @@ def login():
         return render_template("login.html")
     # if method is POST
     else: 
-        ...
+        # getting all the values submitted by the user
+        email, username, password = request.get("name").lower().strip(), request.get("email").lower().strip(), request.get("password").lower().strip()
+        # Checking for the fields to be filled
+        if not any(email, username, password):
+            flash("Invalid credentials.")
+            return redirect("/register")
+
+        # getting the user
+        user = db.execute("SELECT * FROM users WHERE email = ?", (email),)
+        # a bit of error checking
+        if user == []:
+            flash("User doesn't exist please register yourself.")
+            return redirect("/register")
+
+        # checking is the user already exists
+        if not email == user[0]["email"]:
+            flash("The entered email is not registered with us.")
+            return redirect("/login")
+        
+        # checking if the password entered was correct or not
+        hashed = user[0]["password"]
+        if not (check_password_hash(hashed[0]["password"], password)):
+            flash("Entered password is incorrect.")
+            return redirect("/login")
+        
+        # get the user_id for session
+        user_id = user[0]["user_id"]
+        Session["user_id"] = user_id
+
+        # exiting from the login route
+        flash("Logged In successfully.")
+        return redirect("/")
+        
 # This is the register route
 @app.route("/register", method = ["GET", "POST"])
 def register():
@@ -60,6 +92,13 @@ def register():
 
         # getting all the users
         users = db.execute("SELECT * FROM users")
+        # a bit of error checking 
+        if users == []:
+            emails = []
+        # if the user exists
+        else:
+            # the email list
+            emails = [email for user in users for email in user.get("email", "")]
 
         # using regular expression to check for valid email pattern
         match = re.match(r"^[\w!#$%&'\*\+-/=\?\^_`{|}~|]+@[A-Za-z0-9-]{1,63}\..+", email, flags=re.IGNORECASE)
@@ -67,8 +106,6 @@ def register():
             flash("Entered email is not valid.")
             return redirect("/register")
 
-        # the email list
-        emails = [email for user in users for email in user.get("email", "")]
         # checking if the email is unique
         if email in emails:
             flash("Entered email is already in use. Please Log In")
