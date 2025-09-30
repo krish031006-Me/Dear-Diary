@@ -2,15 +2,16 @@
     It contains all the web routes and all the backend logic that will run"""
 
 # Including all the libraries
-from flask import Flask, render_template, Session, request, redirect, flash
-from CS50 import SQL
+from flask import Flask, render_template, session, request, redirect, flash
+from cs50 import SQL
+from flask_session import Session
 from helpers import login_required, hashing
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
 # Initialising the Flask app
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.debug = True
-app.config("TEMPLATES_AUTO_RELOAD")
 
 # Setting up the sessions
 app.config["SESSION_PERMANENT"] = False # not storing the session permanently
@@ -30,12 +31,17 @@ def after_request(response):
     return response
 
 # the main dashboard route
-@app.route("/")
+@app.route("/", methods = ["POST", "GET"])
 def dashboard():
-    ...
+    # if the method is get
+    if request.method == "GET":
+        return render_template("dashboard.html")
+    # if it's post
+    else:
+        ...
 
 # This is the login route for the project
-@app.route("/login", method = ["GET", "POST"])
+@app.route("/login", methods = ["GET", "POST"])
 def login():
     # if method is GET
     if request.method == "GET":
@@ -69,14 +75,14 @@ def login():
         
         # get the user_id for session
         user_id = user[0]["user_id"]
-        Session["user_id"] = user_id
+        session["user_id"] = user_id
 
         # exiting from the login route
         flash("Logged In successfully.")
         return redirect("/")
         
 # This is the register route
-@app.route("/register", method = ["GET", "POST"])
+@app.route("/register", methods = ["GET", "POST"])
 def register():
     # if method is GET
     if request.method == "GET":
@@ -123,7 +129,7 @@ def register():
 
             # fetching the id for the user
             user_id = db.execute("SELECT user_id FROM users WHERE email = ? AND password = ?", email, password);
-            Session["user_id"] = user_id[0]["user_id"] # setting it up for sessions
+            session["user_id"] = user_id[0]["user_id"] # setting it up for sessions
             flash("Registered successfully")
             # returning to the dashboard
             return redirect("/")
