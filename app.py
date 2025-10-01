@@ -50,9 +50,9 @@ def login():
     # if method is POST
     else: 
         # getting all the values submitted by the user
-        email, username, password = request.get("name").lower().strip(), request.get("email").lower().strip(), request.get("password").lower().strip()
+        email, password = request.form.get("email").lower().strip(), request.form.get("password").strip()
         # Checking for the fields to be filled
-        if not any(email, username, password):
+        if not any([email, password]):
             flash("Invalid credentials.")
             return redirect("/register")
 
@@ -91,9 +91,9 @@ def register():
     # if method is POST
     else:
         # getting all the values submitted by the user
-        email, username, password = request.get("name").lower().strip(), request.get("email").lower().strip(), request.get("password").lower().strip()
+        email, username, password, gender = request.form.get("email").lower().strip(), request.form.get("username").lower().strip(), request.form.get("password").strip(), request.form.get("gender").strip()
         # Checking for the fields to be filled
-        if not any(email, username, password):
+        if not any([email, username, password]):
             flash("Invalid credentials.")
             return redirect("/register")
 
