@@ -8,6 +8,7 @@ from flask_session import Session
 from helpers import login_required, hashing
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
+from reflection import control
 
 # Initialising the Flask app
 app = Flask(__name__)
@@ -193,6 +194,17 @@ def share():
     # if method is POST
     else:
         ...
+
+# This is the function to call the control fucntion from reflection.py
+@app.route("/API", methods = ["POST"])
+def control():
+    if request.method == "POST":
+        try:
+            AI_reflect = control()
+        except Exception as e:
+            print(e)
+            return
+        
     
 # Calling the app.py
 if __name__ == "__main__":
