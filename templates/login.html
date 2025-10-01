@@ -3,16 +3,35 @@
 {% block title%}Login{% endblock %}
 
 {% block main %}
-<h1>
-      Login to your account !  
-    </h1>
-    <form action = "/login" method = "post">
-        <div class = "username">
-            <input type = "text" autofocus required autocomplete= "off" placeholder="User name" name="username">
-            <br>
-            <input type = "password" required autocomplete="off" placeholder="Password" name = "password">
-            <br>
-            <button type = "submit">Login</button>
-        </div>
-    </form>
+    <div class="main-log">
+        <form action="" method="post">
+            <h1>
+                Login 
+            </h1>
+            <div class="input">
+                <input type="email" autofocus required autocomplete= "off"
+                placeholder="Email" name="email">
+            </div>
+            <div class="input">
+                <input type="password" required autocomplete= "off"
+                placeholder="Password" name="password">
+            </div>
+            <div class="remember-forgot">
+                
+                <label for="remember"><input type="checkbox" id="remember">Remember me
+                </label>
+                <a href=".">Forgot password !</a>
+            </div>
+            <button type="submit" class="button">Login</button>
+
+            <div class="register-link">
+                <p>
+                    Don't have an account?
+                    <a
+                    href=".">Register
+                </a>
+                </p>
+            </div>
+        </form>
+    </div>
 {% endblock %}
