@@ -8,6 +8,7 @@ from flask_session import Session
 from helpers import login_required, hashing
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
+
 # Initialising the Flask app
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -162,10 +163,13 @@ def space():
 def stats():
     # if method is GET
     if request.method == "GET":
-        return render_template("stats.html")
-    # if method is POST
-    else:
-        ...
+        # Getting the data to pass
+        num = db.execute("SELECT COUNT(*) AS num FROM users WHERE status = 'done'")
+        count = num[0]["num"]
+        num_entry = db.execute("SELECT COUNT(*) AS num_entry FROM users")
+        entries = num_entry[0]["num_entry"]
+        # rendering the template
+        return render_template("stats.html", users = count, entries = entries)
 
 # This is the history route
 @app.route("/history")
