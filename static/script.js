@@ -2,6 +2,22 @@
 let typingTimeout = null;
 let typingId = 0;
 
+// A global flag to prevent error full API calls
+let isGood=1;
+
+/* This is the debounce function-
+    This function let's us effectively call a specific function
+    after a single time condition is met*/
+function debounce(func, delay = 500) {
+    let timeoutId;
+    return function(...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
 // This is DOMContentLoaded event and will be used to call all the necessary functions
 document.addEventListener("DOMContentLoaded", function(event){
 
@@ -10,6 +26,15 @@ document.addEventListener("DOMContentLoaded", function(event){
         // Calling the type_title() function
         title_type();
     } 
+
+    // Checking if we are on the space page to run the control function
+    const inputField = document.getElementById("entry_box");
+    // Calling when it exists and the inner HTML is greater than 50 characters
+    if(inputField && isGood === 1){
+        // Calling the debouncer to run call_route when the user doen't press anything fro 8 sec straight
+        const debouncedCall = debounce(call_route, 8000);
+        inputField.addEventListener('input', debouncedCall);
+    }   
 });
 
 // The typing function for title
@@ -68,3 +93,34 @@ function title_type(){
     }
     type();
 };
+
+// This is the function to call the flask route
+function call_route(){
+    // Getting the element
+    let entry = document.getElementById("entry_box");
+    const reflection = document.getElementById('AI_box');
+
+    // can't run anyting with not much content
+    if (entry.value.trim().length < 50) { 
+        reflection.innerHTML = 'Reflection too short. Keep writing...';
+        return;
+    }
+    
+    // --- The Fetch Logic ---
+    fetch('/', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entry_text: entry.value })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display AI response
+        // We use `` for formatted strings in js
+        reflection.innerHTML += `<p>${data.reflection}</p>`;
+    })
+    .catch(error => {
+        reflection.innerHTML += 'Error contacting AI service.';
+        isGood = 0;
+        console.error('Fetch Error:', error);
+    });
+}
