@@ -9,6 +9,10 @@
 import os
 from cerebras.cloud.sdk import Cerebras
 
+# the main function to control cerebras_call
+def control():
+    ...
+
 # This function below controls everything regarding the Cerebras API 
 def cerebras_call(prompt, model):
     # getting the cerbras API key stored in environment variables
