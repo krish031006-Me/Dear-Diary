@@ -70,7 +70,7 @@ def login():
         
         # checking if the password entered was correct or not
         hashed = user[0]["password"]
-        if not (check_password_hash(hashed[0]["password"], password)):
+        if not (check_password_hash(hashed, password)):
             flash("Entered password is incorrect.")
             return redirect("/login")
         
@@ -123,13 +123,14 @@ def register():
         else:
             # Inserting the data as a new user with a bit of error checking
             try:
-                db.execute("INSERT INTO users (email, username, password) VALUES(?, ?, ?)", email, username, hashing(password))
+                db.execute("INSERT INTO users (email, username, password, gender) VALUES(?, ?, ?, ?)", email, username, hashing(password), gender)
             except Exception as e:
                 flash("Email already in use")
                 return redirect("/register")
 
             # fetching the id for the user
-            user_id = db.execute("SELECT user_id FROM users WHERE email = ? AND password = ?", email, password);
+            user_id = db.execute("SELECT user_id FROM users WHERE email = ?", (email),);
+            print(user_id)
             session["user_id"] = user_id[0]["user_id"] # setting it up for sessions
             flash("Registered successfully")
             # returning to the dashboard
