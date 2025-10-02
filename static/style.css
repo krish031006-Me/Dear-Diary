@@ -3,9 +3,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family:"Poppins", sans-serif;
+    font-family:"Mona Sans", sans-serif;
 }
 #login_div{
+    padding: 50px;
     display: flex;
     justify-content: center;
     /* This property decides items are spaced along the main axis (usually horizontal).*/
