@@ -11,28 +11,32 @@ from cerebras.cloud.sdk import Cerebras
 
 # the main function to control cerebras_call
 def control(entry, previous, model, count, db, user_id):
+    # getting the cerbras API key stored in environment variables
+    client = Cerebras(
+        api_key=os.environ.get("CEREBRAS_API_KEY")
+    )
 
     # if this is the first call so need for the any summary
     if count == 0:
         summary = ""
-        reflect = reflector(summary, model)
+        reflect = reflector(entry, summary, model, client)
     # if it's not the first call
     else:
         # fetch prevoius summary if any
-        recent = db.execute("SELECT * FROM recent_summary WHERE email IN(SELECT email FROM users WHERE user_id = ?)", user_id)
+        recent = db.execute("SELECT * FROM recent_summary JOIN users ON recent_summary.user_id = users.user_id WHERE recent_summary.user_id = ?", (user_id),)
         # getting the summary
         if recent == []:
             summary = ""
         else:
-            summary = summarizer(entry, previous, model, user_id, db, recent[0]["summary"])
+            summary = summarizer(entry, previous, model, user_id, db, recent[0]["summary"], client)
         # calling the reflector
-        reflect = reflector(summary, model)
+        reflect = reflector(entry, summary, model, client)
     
     # after reflect is created you just send it back
     return reflect
 
 # This function below calls the Cerebras to use it as a summarizer for the user history 
-def summarizer(entry, previous, model, user_id, db, recent):
+def summarizer(entry, previous, model, user_id, db, recent, client):
     # This is the prompt for the summarizer
     prompt = f"""
 [INST]
@@ -40,7 +44,7 @@ def summarizer(entry, previous, model, user_id, db, recent):
 You are an expert memory compression agent. Your task is to update the 'PREVIOUS CONTEXT' with the information from the 'NEWEST EXCHANGE' to create a single, unified, and concise summary for an empathetic coach.
 
 **Strict Output Constraints:**
-1.  **Length:** The output MUST be only 2-3 sentences long (maximum 50 tokens).
+1.  **Length:** The output MUST be only 3-4 sentences long (maximum 100 tokens).
 2.  **Content:** The summary MUST concisely cover:
     * The user's most consistent **emotional pattern** or core struggle.
     * The primary **topic** or **goal** of the project.
@@ -55,12 +59,7 @@ You are an expert memory compression agent. Your task is to update the 'PREVIOUS
 Aura: {previous}
 User:{entry}
 [/INST]
-"""
-
-    # getting the cerbras API key stored in environment variables
-    client = Cerebras(
-        api_key=os.environ.get("CEREBRAS_API_KEY")
-    )
+""".strip()
 
     # getting the result from Cerebaras
     completion = client.completions.create(
@@ -79,6 +78,7 @@ User:{entry}
         generated_text = first_choice.text
     except (IndexError, AttributeError) as e:
         print(f"Error extracting text: The response structure was not as expected. {e}")
+        generated_text = "No summary available!"
 
     # if it's not the first summary
     if recent:
@@ -92,5 +92,47 @@ User:{entry}
     return generated_text
 
 # This function below calls the reflector using Cerebras with the summaries provided from the summarizer
-def reflector(prompt, summary, model):
-    ...
+def reflector(entry, summary, model, client):
+    # The prompt
+    prompt = f"""
+[INST]
+<<SYS>>
+You are "Aura," a highly empathetic and insightful AI coach. Your role is to foster self-awareness and provide thoughtful support. You must maintain a warm, non-judgemental tone.
+
+**Strict Behavioral Guidelines:**
+1.  **No Direct Advice:** You must guide the user to their own insights, not provide solutions.
+2.  **Refer to Context:** You must use the provided reflection context to inform your reflection.
+
+**Strict Output Format:**
+Every response MUST be structured into three distinct, short paragraphs:
+
+1.  **Acknowledgment** (Validate the current feeling/situation).
+2.  **Deep Reflection** (Connect current input to a pattern or theme from the context).
+3.  **Forward Inquiry** (ONE open-ended question for deeper exploration).
+
+---
+**CURRENT REFLECTION CONTEXT (Summary):**
+{summary}
+---
+<</SYS>>
+
+User:{entry}
+[/INST]
+""".strip()
+
+    # getting the result from Cerebaras
+    completion = client.completions.create(
+        prompt=prompt,
+        max_tokens=200,
+        model=model,
+    )
+
+    # Fetching the result from completion
+    try:
+        # Extract and strip the final generated text
+        generated_text = completion.choices[0].text.strip()
+        return generated_text
+    except (IndexError, AttributeError) as e:
+        print(f"Error extracting text from reflector: {e}")
+        # Fail-safe response
+        return "I apologize, I seem to have encountered a technical issue. Can you please try asking again?"
