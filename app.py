@@ -137,6 +137,14 @@ def register():
             # returning to the dashboard
             return redirect("/")
             
+# The logout route
+@app.route("/logout")
+def logout():
+    # This clear the user_id
+    session.clear()
+    # call the login route
+    return redirect("/login")
+
 # This is the trends route to show trends 
 @app.route("/trends")
 @login_required

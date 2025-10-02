@@ -5,7 +5,7 @@
     box-sizing: border-box;
     font-family:"Poppins", sans-serif;
 }
-body{
+#login_div{
     display: flex;
     justify-content: center;
     /* This property decides items are spaced along the main axis (usually horizontal).*/
@@ -17,6 +17,8 @@ body{
     background-position: center;
     background-color: #A3BCF9;
 }
+
+/* These are the properties of the login page */
 .main-log{
     width: 420px;
     background-color: transparent;
@@ -91,8 +93,11 @@ body{
 .register-link p a:hover{
     text-decoration: underline;
 }
+
+ /* These below are the properties for the main title on dashboard*/
 #title{
-    text-align: center;
+    padding-top: 70px;
+    text-align: left;
     color: black;
 }
 #first_word{
@@ -118,7 +123,8 @@ hr{
 hr.fade-in{
     opacity: 1;
 }
-/*css for tittle bar*/
+
+/* css for tittle bar */
 .Header{
     display: flex;
     height: 100px;
