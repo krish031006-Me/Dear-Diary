@@ -40,7 +40,7 @@ def dashboard():
         return render_template("dashboard.html")
     # if it's post
     else:
-        ...
+        return render_template("dashboard.html")
 
 # This is the login route for the project
 @app.route("/login", methods = ["GET", "POST"])
@@ -222,7 +222,7 @@ def call_control():
         except Exception as e:
             # returning as a json object
             return jsonify({
-                "message":f"Error running control: {e}"
+                "reflection":f"Error running control: {e}"
             }), 500
         
         # returning the reflection from Cerebras call 

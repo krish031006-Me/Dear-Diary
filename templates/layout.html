@@ -26,24 +26,22 @@
     <!--The title bar for the whole project-->
     <div class="Header">
         <div class="left-section">
-            <h1 class="heading">dearDiary<hr class="hr"></h1>
-            <a href="/d" class="writing">Writing space</a>
-            <a href="/d" class="trends">Trends</a>
-            <a href="/d" class="share">Share</a>
-            <a href="/d" class="history">History</a> 
+            <h1 class="heading"><a href = "/">dearDiary<hr class="hr"></a></h1>
+            <a href="/space" class="writing">Writing space</a>
+            <a href="/trends" class="trends">Trends</a>
+            <a href="/share" class="share">Share!</a>
+            <a href="/stats" class="share">Stats</a>
+            <a href="/history" class="history">History</a> 
         </div>
         <div class="right-section">
-            <a href="/d" class="login">Login</a>
-            <a href="/d" class="register">Register</a>
+            {% if not session["user_id"] %}
+                <a href="/login" class="login">LogIn</a>
+                <a href="/register" class="register">Register</a>
+            {% else %}
+                <a href="/login" class="login">Log out</a>
+            {% endif %}
         </div>
-        
     </div>
-    <!--Temporary butotn to call stuff-->
-    <header style="display: flex; flex-direction: row;">
-        <a href = "/login">Login</a>
-        <a href = "/register">Register</a>
-        <a href = "/space">Space</a>
-    </header>
 
     <!--To print the flash messages-->
     {% if get_flashed_messages() %}

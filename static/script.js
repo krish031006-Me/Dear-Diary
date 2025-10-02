@@ -107,7 +107,7 @@ function title_type(){
 function call_route(){
     // Getting the element
     let entry = document.getElementById("entry_box").value.trim();
-    let reflect = document.getElementById('AI_box').value.trim();
+    const reflect = document.getElementById('AI_box').value.trim();
 
     // can't run anyting with not much content
     if (entry.length < 50) { 
@@ -115,7 +115,7 @@ function call_route(){
     }
     
     // --- The Fetch Logic ---
-    fetch('/', { 
+    fetch('/API', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ entry_text: entry, 
@@ -124,14 +124,17 @@ function call_route(){
         })
     })
     .then(response => response.json())
-    localStorage.setItem('count', count + 1)
     .then(data => {
+        // Updating count in localstorage
+        count++;
+        localStorage.setItem('count', count)
         // Display AI response
         // We use `` for formatted strings in js
-        reflection.innerHTML += `<p>${data.reflection}</p>`;
+        console.log(data.reflection);
+        reflect.value += data.reflection + '\n\n';
     })
     .catch(error => {
-        reflection.innerHTML += 'Error contacting AI service.';
+        reflect.innerHTML += 'Error contacting AI service.';
         isGood = 0;
         console.error('Fetch Error:', error);
     });
