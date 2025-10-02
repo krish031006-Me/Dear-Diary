@@ -183,7 +183,13 @@ def history():
         return render_template("history.html")
     # if method is GET
     if request.method == "GET":
-        return render_template("history.html", entries = entries)
+        # getting the demo lines  
+        few_lines = [] # an empty list for adding few demo lines
+        for entry in entries:
+            text = entry["entry"]
+            few_lines.append(text[:200])
+
+        return render_template("history.html", entries = entries, lines = few_lines)
     # if method is POST
     else:
         return render_template("space.html")
