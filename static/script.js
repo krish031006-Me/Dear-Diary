@@ -107,7 +107,7 @@ function title_type(){
 function call_route(){
     // Getting the element
     let entry = document.getElementById("entry_box").value.trim();
-    const reflect = document.getElementById('AI_box').value.trim();
+    const reflect = document.getElementById('AI_box');
 
     // can't run anyting with not much content
     if (entry.length < 50) { 
@@ -125,13 +125,13 @@ function call_route(){
     })
     .then(response => response.json())
     .then(data => {
+        const cleanReflect = data.reflection.replace('<|eot_id|>', '');
+        reflect.value += cleanReflect + '\n\n';
         // Updating count in localstorage
         count++;
         localStorage.setItem('count', count)
         // Display AI response
         // We use `` for formatted strings in js
-        console.log(data.reflection);
-        reflect.value += data.reflection + '\n\n';
     })
     .catch(error => {
         reflect.innerHTML += 'Error contacting AI service.';
