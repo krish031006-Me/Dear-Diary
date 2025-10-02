@@ -2,7 +2,7 @@
     It contains all the web routes and all the backend logic that will run"""
 
 # Including all the libraries
-from flask import Flask, render_template, session, request, redirect, flash
+from flask import Flask, render_template, session, request, redirect, flash, jsonify
 from cs50 import SQL
 from flask_session import Session
 from helpers import login_required, hashing
@@ -197,15 +197,29 @@ def share():
 
 # This is the function to call the control fucntion from reflection.py
 @app.route("/API", methods = ["POST"])
-def control():
+def call_control():
+    # Running if method is post
     if request.method == "POST":
+        # Calling control() with error checking
         try:
-            AI_reflect = control()
+            # Getting the body of the JSOn object that was sended 
+            body = request.get_json()
+            # fetching entry text from body
+            entry = body.get("entry_text")
+            count = body.get("times")
+            previous = body.get("reflect_text")
+            AI_reflect = control(entry, previous, "Llama-3.3-70B", count, db, session["user_id"])
         except Exception as e:
-            print(e)
-            return
+            # returning as a json object
+            return jsonify({
+                "message":f"Error running control: {e}"
+            }), 500
         
-    
+        # returning the reflection from Cerebras call 
+        return jsonify({
+            "reflection": AI_reflect
+        }), 200
+
 # Calling the app.py
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=True)
