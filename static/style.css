@@ -118,3 +118,47 @@ hr{
 hr.fade-in{
     opacity: 1;
 }
+/*css for tittle bar*/
+.Header{
+    display: flex;
+    height: 100px;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: cornsilk;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    border-bottom-width: 1px;
+    border-bottom-style:solid ;
+    z-index: 100;
+}
+.left-section{
+    display: flex;
+    align-items: center;   
+}
+.right-section{
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.hr{
+    margin-top: 2px;
+    width: 150px;
+    font-weight: bold;
+}
+.Header a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  margin: 0 12px;
+  padding: 6px 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 4px;
+}
+
+.Header a:hover {
+  background-color: #f0e6d2;
+  color: #000;
+}
