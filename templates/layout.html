@@ -25,6 +25,13 @@
 <body>
     <!--The title bar for the whole project-->
 
+    <!--Temporary butotn to call stuff-->
+    <header style="display: flex; flex-direction: row;">
+        <a href = "/login">Login</a>
+        <a href = "/register">Register</a>
+        <a href = "/space">Space</a>
+    </header>
+
     <!--To print the flash messages-->
     {% if get_flashed_messages() %}
         <header>
