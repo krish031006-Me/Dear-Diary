@@ -2,6 +2,9 @@
 let typingTimeout = null;
 let typingId = 0;
 
+// LocalStorage to count th enumber of times the API has been called
+let count = localStorage.getItem('count') || 0;
+
 // A global flag to prevent error full API calls
 let isGood=1;
 
@@ -35,6 +38,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         const debouncedCall = debounce(call_route, 8000);
         inputField.addEventListener('input', debouncedCall);
     }   
+});
+
+// This is the eventlistener to delete coount from storage beofre unloading
+window.addEventListener("beforeunload", function(event){
+    // removing the item from localstorage
+    localStorage.removeItem("count")
 });
 
 // The typing function for title
@@ -97,12 +106,11 @@ function title_type(){
 // This is the function to call the flask route
 function call_route(){
     // Getting the element
-    let entry = document.getElementById("entry_box");
-    const reflection = document.getElementById('AI_box');
+    let entry = document.getElementById("entry_box").value.trim();
+    let reflect = document.getElementById('AI_box').value.trim();
 
     // can't run anyting with not much content
-    if (entry.value.trim().length < 50) { 
-        reflection.innerHTML = 'Reflection too short. Keep writing...';
+    if (entry.length < 50) { 
         return;
     }
     
@@ -110,9 +118,13 @@ function call_route(){
     fetch('/', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entry_text: entry.value })
+        body: JSON.stringify({ entry_text: entry, 
+            times: count,
+            reflect_text: reflect
+        })
     })
     .then(response => response.json())
+    localStorage.setItem('count', count + 1)
     .then(data => {
         // Display AI response
         // We use `` for formatted strings in js
