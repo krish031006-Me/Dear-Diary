@@ -218,7 +218,7 @@ def call_control():
             entry = body.get("entry_text")
             count = body.get("times")
             previous = body.get("reflect_text")
-            AI_reflect = control(entry, previous, "Llama-3.3-70B", count, db, session["user_id"])
+            AI_reflect = control(entry, previous, "llama-3.3-70b", count, db, session["user_id"])
         except Exception as e:
             # returning as a json object
             return jsonify({
