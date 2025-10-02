@@ -5,17 +5,17 @@
     box-sizing: border-box;
     font-family:"Poppins", sans-serif;
 }
-body:not(#title){
+body{
     display: flex;
     justify-content: center;
     /* This property decides items are spaced along the main axis (usually horizontal).*/
     align-items: center;
     min-height: 100vh;
-    background: url('mot.jpeg') no-repeat;
+    /* background: url('mot.jpeg') no-repeat;*/
     /* use to paste image in the background */
     background-size: cover;
     background-position: center;
-
+    background-color: #A3BCF9;
 }
 .main-log{
     width: 420px;
@@ -84,7 +84,7 @@ body:not(#title){
     margin: 20px 0 15px ;
 }
 .register-link p a{
-    color: #fff;
+    color: #090909;
     text-decoration: none;
     font-weight: 600;
 }
@@ -93,6 +93,7 @@ body:not(#title){
 }
 #title{
     text-align: center;
+    color: black;
 }
 #first_word{
     font-size: 90px;
