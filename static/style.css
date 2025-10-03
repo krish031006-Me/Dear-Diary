@@ -13,7 +13,7 @@
     /* This property decides items are spaced along the main axis (usually horizontal).*/
     align-items: center;
     min-height: 100vh;
-    /* background: url('mot.jpeg') no-repeat;*/
+    background: url('mot.jpeg') no-repeat;
     /* use to paste image in the background */
     background-size: cover;
     background-position: center;
@@ -178,4 +178,7 @@ hr.fade-in{
 }
 #AI_box{
     margin-top: 150px;
+}
+.layout-body:not(.Header){
+    background-color:#A3BCF9 ;
 }
