@@ -254,6 +254,10 @@ hr.fade-in {
 }
 
 /* The 'Save' button for the diary entry */
+.button_container{
+  display:flex;
+  justify-content: center;
+}
 .inside_button {
   width: 100px;
   height: 50px;
@@ -261,7 +265,6 @@ hr.fade-in {
   color: white;
   border: 2px solid #799efb; /* A lighter blue border */
   border-radius: 10%; /* Slightly rounded corners */
-  margin-left: 675px;
   margin-top: 50px;
   margin-bottom: 70px;
 }
@@ -269,4 +272,11 @@ hr.fade-in {
 /* A general body style that does not apply to the header */
 .layout-body:not(.Header) {
   background-color: #A3BCF9;
+}
+
+/* For the history page*/
+.history_common:not(#slides){
+  margin-top: 150px;
+  color: black;
+  text-align: center;
 }
