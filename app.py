@@ -92,7 +92,7 @@ def register():
     # if method is POST
     else:
         # getting all the values submitted by the user
-        email, username, password, gender = request.form.get("email").lower().strip(), request.form.get("username").lower().strip(), request.form.get("password").strip(), request.form.get("gender").strip()
+        email, username, password = request.form.get("email").lower().strip(), request.form.get("username").lower().strip(), request.form.get("password").strip()
         # Checking for the fields to be filled
         if not any([email, username, password]):
             flash("Invalid credentials.")
@@ -100,9 +100,9 @@ def register():
 
         # getting all the users
         users = db.execute("SELECT * FROM users")
+
         # a bit of error checking 
         if users == []:
-            
             emails = []
         # if the user exists
         else:
@@ -124,8 +124,9 @@ def register():
         else:
             # Inserting the data as a new user with a bit of error checking
             try:
-                db.execute("INSERT INTO users (email, username, password, gender) VALUES(?, ?, ?, ?)", email, username, hashing(password), gender)
+                db.execute("INSERT INTO users (email, username, password) VALUES(?, ?, ?)", email, username, hashing(password))
             except Exception as e:
+                print("inside")
                 flash("Email already in use")
                 return redirect("/register")
 
@@ -235,10 +236,16 @@ def call_control():
             return jsonify({
                 "reflection":f"Error running control: {e}"
             }), 500
-        
+
+        # modifying the return AI refelction before returning    
+        if '[' in AI_reflect:
+            reflect = (AI_reflect.split('['))[0]
+        else:
+            reflect = (AI_reflect.split('<'))[0]
+    
         # returning the reflection from Cerebras call 
         return jsonify({
-            "reflection": AI_reflect
+            "reflection": reflect
         }), 200
 
 # Calling the app.py
