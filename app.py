@@ -165,7 +165,10 @@ def space():
         return render_template("space.html")
     # if method is POST
     else:
-        ...
+        user_entry = request.form.get("entry_box")
+        db.execute("INSERT INTO entries (user_id, entry) VALUES (?, ?)", session["user_id"], user_entry)
+        flash("Entry saved!")
+        return redirect("/")
 
 # This is the route for stats page
 @app.route("/stats")
@@ -200,7 +203,7 @@ def history():
         return render_template("history.html", entries = entries, lines = few_lines)
     # if method is POST
     else:
-        return render_template("space.html")
+        return render_template("space.html", entry=...)
 
 # This is the sharing route for the entries if needed
 @app.route("/share")
