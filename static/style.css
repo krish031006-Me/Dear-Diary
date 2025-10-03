@@ -280,3 +280,79 @@ hr.fade-in {
   color: black;
   text-align: center;
 }
+/* General Body Style */
+.wr_space {
+    background-color: #F3DFA2; /* A soft beige, similar to bisque but calmer */
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 95px;
+}
+
+/* Main Container for the entire writing space */
+.writing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.space-head h1 {
+    color: #5a4a42;
+    font-weight: 300;
+}
+
+/* This is the key part: Flex container for the two pages */
+.text-areas {
+    display: flex; /* This places the children (the pages) side-by-side */
+    gap: 15px;      /* Creates a small gap between the two pages */
+    margin-bottom: 20px;
+}
+
+/* Styling for each individual "page" */
+.page {
+    background-color: #fff;
+    width: 350px;
+    height: 500px;
+    padding: 25px;
+    border: 1px solid #ddd;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15); /* Adds a 3D shadow effect */
+    border-radius: 3px;
+}
+
+/* Styling for the textareas to fill the pages */
+.page textarea {
+    width: 100%;
+    height: 100%;
+    border: none;       /* Removes the default border */
+    resize: none;       /* Prevents the user from resizing it */
+    outline: none;      /* Removes the blue outline on focus */
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Make the readonly textarea have a slightly different look */
+.page textarea[readonly] {
+    background-color: #fafafa;
+}
+
+/* Styling for the Save button */
+.space-button {
+    padding: 12px 30px;
+    font-size: 18px;
+    color: white;
+    background-color: #8B4513; /* A saddle brown color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 310px ;
+}
+
+.space-button:hover {
+    background-color: #A0522D; /* A slightly lighter sienna color on hover */
+}
