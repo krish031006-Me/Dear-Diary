@@ -4,7 +4,10 @@
 {% block main %}
 
     <h1 class="title_space">Write your thoughts out!</h1>
-    <textarea id="entry_box"></textarea>
-    <textarea id="AI_box"></textarea>
+    <textarea id="entry_box" placeholder="Write you diary here!" autofocus autocomplete="off"></textarea>
+    <textarea id="AI_box" placeholder="For Aura" autocomplete="off"></textarea>
+    <form action="/space" method="post">
+        <button type="submit" class="inside_button">Save</button>
+    </form>
 
 {% endblock %}
