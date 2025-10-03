@@ -1,73 +1,101 @@
-/* As i use universal selector (*) this css will apply to all the elements  */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family:"Mona Sans", sans-serif;
+/* =============================================
+   Base & Universal Styles
+   ============================================= */
+
+/* The universal selector (*) applies these styles to every single element 
+  on the page. This is a common CSS reset.
+*/
+* {
+  margin: 0; /* Removes default margins from all elements */
+  padding: 0; /* Removes default padding from all elements */
+  box-sizing: border-box; /* Changes the box model so padding and borders are included in the element's total width and height */
+  font-family: "Mona Sans", sans-serif; /* Sets a default font for the entire project */
 }
 
-#login_div{
-    padding: 50px;
-    display: flex;
-    justify-content: center;
-    /* This property decides items are spaced along the main axis (usually horizontal).*/
-    align-items: center;
-    min-height: 100vh;
-    background: url('mot.jpeg') no-repeat;
-    /* use to paste image in the background */
-    background-size: cover;
-    background-position: center;
-    background-color: #A3BCF9;
+/* =============================================
+   Login Page Styles
+   ============================================= */
+
+/* Styles for the main container of the login page */
+#login_div {
+  padding: 50px; /* Adds space inside the container */
+  display: flex; /* Enables Flexbox for easy centering */
+  justify-content: center; /* Horizontally centers the content (the login box) */
+  align-items: center; /* Vertically centers the content */
+  min-height: 100vh; /* Ensures the container takes up at least the full height of the viewport */
+  background: url('mot.jpeg') no-repeat; /* Sets a background image and prevents it from repeating */
+  background-size: cover; /* Scales the image to cover the entire container */
+  background-position: center; /* Centers the background image */
+  background-color: #A3BCF9; /* Fallback color if the image fails to load */
 }
 
-/* These are the properties of the login page */
-.main-log{
-    width: 420px;
-    background-color: transparent;
-    color: white;
-    border-radius: 10px;
-    padding: 30px 40px;
+/* This is the main login form wrapper with a frosted glass effect.
+*/
+.main-log {
+  width: 420px; /* Sets a fixed width for the login box */
+  background-color: transparent; /* Makes the background see-through */
+  color: white; /* Sets the text color to white */
+  border-radius: 10px; /* Rounds the corners of the login box */
+  padding: 30px 40px; /* Adds internal spacing (30px top/bottom, 40px left/right) */
+  /* For a true frosted glass effect, you would add:
+     backdrop-filter: blur(10px); 
+     border: 1px solid rgba(255, 255, 255, 0.2); 
+  */
 }
-.main-log h1{
-    text-align: center;
-    font-size: 38px;
+
+.main-log h1 {
+  text-align: center; /* Centers the main heading text */
+  font-size: 38px; /* Sets the size of the heading */
 }
-.main-log .input{
-    width: 100%;
-    height: 50px;
-    margin: 30px 0;
+
+/* A container for each input field to control spacing */
+.main-log .input {
+  width: 100%; /* Takes up the full width of its parent (.main-log) */
+  height: 50px; /* Sets a fixed height */
+  margin: 30px 0; /* Adds space above and below each input container */
 }
-.input input{
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    border: 2px solid rgba(255 , 255 , 255, .2);
-    border-radius: 40px;
-    font-size: 16px;
-    color: #fff;
-    padding: 20px 45px 20px 20px;
+
+/* Styles for the actual <input> elements */
+.input input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2); /* A semi-transparent white border */
+  border-radius: 40px; /* Creates a pill shape */
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px; /* Adds space inside the input field (top, right, bottom, left) */
+  outline: none; /* Removes the default browser outline on focus */
 }
-.input input::placeholder{
-    color: #fff;
+
+/* Styles for the placeholder text inside input fields */
+.input input::placeholder {
+  color: #fff;
 }
-.main-log .remember-forgot{
-    display: flex;
-    justify-content: space-between;
-    font-size: 14.5px;
-    margin: -15px 0 15px;
+
+/* Container for the "Remember Me" checkbox and "Forgot Password" link */
+.main-log .remember-forgot {
+  display: flex; /* Aligns items in a row */
+  justify-content: space-between; /* Pushes "Remember Me" to the left and "Forgot" to the right */
+  font-size: 14.5px;
+  margin: -15px 0 15px; /* Adjusts spacing to pull it closer to the input above */
 }
-.remember-forgot label input{
-    accent-color: white;
-    margin-right: 3px;
+
+/* Styles for the "Remember Me" checkbox */
+.remember-forgot label input {
+  accent-color: white; /* Changes the color of the checkmark */
+  margin-right: 3px; /* Adds a small space between the checkbox and its label */
 }
-.remember-forgot a{
-    color: #fff;
-    text-decoration: none;
+
+/* Styles for links within this section */
+.remember-forgot a {
+  color: #fff;
+  text-decoration: none; /* Removes the default underline */
 }
-.remember-forgot a:hover{
-    text-decoration: underline;
+
+/* Adds an underline when a user hovers over the link */
+.remember-forgot a:hover {
+  text-decoration: underline;
 }
 .main-log .button{
     width: 100%;
@@ -82,131 +110,163 @@
     color: #333;
     font-weight: 600;
 }
-.main-log .register-link{
-    font-size: 14.5px;
-    text-align: center;
-    margin: 20px 0 15px ;
-}
-.register-link p a{
-    color: #090909;
-    text-decoration: none;
-    font-weight: 600;
-}
-.register-link p a:hover{
-    text-decoration: underline;
+
+/* Container for the registration link at the bottom */
+.main-log .register-link {
+  font-size: 14.5px;
+  text-align: center;
+  margin: 20px 0 15px; /* Adds spacing around the link */
 }
 
- /* These below are the properties for the main title on dashboard*/
-#title{
-    margin-top: 50px;
-    padding-top: 70px;
-    text-align: left;
-    color: black;
-}
-#first_word{
-    font-size: 90px;
-    font-family: "Mona Sans", sans-serif;
-    font-weight: bold;
-}
-#second_word{
-    font-size: 180px;
-    font-family: "Dancing Script", cursive;
-}
-hr{
-    width: 1000px;
-    display:block;
-    height: 10px;
-    border:none;
-    background-color:#000000;
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    margin-left: 250px;
-}
-hr.fade-in{
-    opacity: 1;
+.register-link p a {
+  color: #090909; /* Very dark, almost black text color */
+  text-decoration: none;
+  font-weight: 600;
 }
 
-/* css for tittle bar */
-.Header{
-    display: flex;
-    height: 100px;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: cornsilk;
-    position: fixed;
-    top: 0px;
-    right: 0px;
-    left: 0px;
-    bottom: 0px;
-    border-bottom-width: 1px;
-    border-bottom-style:solid ;
-    z-index: 100;
+.register-link p a:hover {
+  text-decoration: underline;
 }
-.left-section{
-    display: flex;
-    align-items: center;   
+
+/* =============================================
+   Dashboard & General Content Styles
+   ============================================= */
+
+/* Styles for the main title on the dashboard page */
+#title {
+  margin-top: 50px;
+  padding-top: 70px; /* Adds space above, likely to push it down from a fixed header */
+  text-align: left;
+  color: black;
 }
-.right-section{
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
+
+#first_word {
+  font-size: 90px;
+  font-family: "Mona Sans", sans-serif;
+  font-weight: bold;
 }
-.hr{
-    margin-top: 2px;
-    width: 150px;
-    font-weight: bold;
+
+#second_word {
+  font-size: 180px;
+  font-family: "Dancing Script", cursive; /* Uses a decorative, script-like font */
 }
+
+/* A decorative horizontal rule (line) */
+hr {
+  width: 1000px;
+  display: block;
+  height: 10px;
+  border: none;
+  background-color: #000000;
+  border-radius: 50%; /* Makes the ends of the thick line rounded */
+  opacity: 0; /* Initially invisible */
+  transition: opacity 1s ease-in-out; /* Smoothly fades in over 1 second */
+  margin-left: 250px;
+}
+
+/* Class to trigger the fade-in animation, likely added with JavaScript */
+hr.fade-in {
+  opacity: 1; /* Makes the line visible */
+}
+
+/* =============================================
+   Fixed Header / Navigation Bar
+   ============================================= */
+.Header {
+  display: flex; /* Aligns children (left and right sections) in a row */
+  height: 100px;
+  flex-direction: row;
+  justify-content: space-between; /* Pushes children to opposite ends */
+  background-color: cornsilk;
+  position: fixed; /* Fixes the header to the top of the viewport */
+  top: 0;
+  right: 0;
+  left: 0;
+  border-bottom: 1px solid black;
+  z-index: 100; /* Ensures the header stays on top of other content */
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  align-items: center; /* Vertically centers the items within the header */
+}
+
+.right-section {
+  flex-shrink: 0; /* Prevents the right section from shrinking if space is limited */
+}
+
+/* A specific horizontal rule inside the header, likely for a logo or title */
+.hr {
+  margin-top: 2px;
+  width: 150px;
+  font-weight: bold;
+}
+
+/* Styles for navigation links in the header */
 .Header a {
   text-decoration: none;
   color: #333;
   font-weight: 500;
-  margin: 0 12px;
+  margin: 0 12px; /* Adds space between the links */
   padding: 6px 10px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
   border-radius: 4px;
 }
 
+/* Hover effect for navigation links */
 .Header a:hover {
-  background-color: #f0e6d2;
+  background-color: #f0e6d2; /* A light background color on hover */
   color: #000;
 }
 
-#entry_box{
-    margin-left: 100px;
-    margin-top: 100px;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.6);
-    border: 3px solid black;
-    width: 500px;
-    height: 500px;
-    padding: 10px 20px 10px 20px;
-}
-#AI_box{
-    margin-left: 300px;
-    margin-top: 100px;
-    margin-right: 50px;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.6);
-    border: 3px solid black;
-    width: 500px;
-    height: 500px;
-    padding: 5px 15px 5px 15px;
+/* =============================================
+   Diary Entry Page Styles
+   ============================================= */
+
+/* Styles for the user's main diary entry textarea */
+#entry_box {
+  margin-left: 100px;
+  margin-top: 100px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); /* Adds a shadow for depth */
+  border: 3px solid black;
+  width: 500px;
+  height: 500px;
+  padding: 10px 20px;
 }
 
-.title_space{
-    text-align: center;
-    margin-top: 150px;
+/* Styles for the AI interaction textarea */
+#AI_box {
+  margin-left: 300px;
+  margin-top: 100px;
+  margin-right: 50px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+  border: 3px solid black;
+  width: 500px;
+  height: 500px;
+  padding: 5px 15px;
 }
-.inside_button{
-    width:100px;
-    height: 50px;
-    background-color: #113d83;
-    color: white;
-    border: 2px solid #799efb;
-    border-radius: 10%;
-    margin-left: 675px;
-    margin-top: 50px;
-    margin-bottom: 70px;
+
+/* Main title for the diary entry page */
+.title_space {
+  text-align: center;
+  margin-top: 150px; /* Pushes the title down from the fixed header */
 }
-.layout-body:not(.Header){
-    background-color: #A3BCF9;
+
+/* The 'Save' button for the diary entry */
+.inside_button {
+  width: 100px;
+  height: 50px;
+  background-color: #113d83; /* A deep blue */
+  color: white;
+  border: 2px solid #799efb; /* A lighter blue border */
+  border-radius: 10%; /* Slightly rounded corners */
+  margin-left: 675px;
+  margin-top: 50px;
+  margin-bottom: 70px;
+}
+
+/* A general body style that does not apply to the header */
+.layout-body:not(.Header) {
+  background-color: #A3BCF9;
 }

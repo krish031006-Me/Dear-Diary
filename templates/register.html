@@ -3,28 +3,32 @@
 {% block title%}Register{% endblock %}
 
 {% block main %}
-<h1>
-    Create your account! 
-</h1>
-    <form action = "/register" method = "post">
-        <div class = "mb-3">
-            <input type="text" autofocus required autocomplete="off" name = "username" placeholder="User name" class="username">
-            <br>
-            <input type = "email" required autocomplete="off" name="email" placeholder="Enter your email">
-            <br>
-            <input type = "password" required name="password" autocomplete="off" placeholder="password" >
+<div id="login_div">
+        <div class="main-log">
+            <form action="" method="post">
+                <h1 class="heading">
+                Create your account!
+                </h1>
+                <div class="input">
+                    <input type="text" placeholder="Username" autofocus required
+                    autocomplete="off" name="username">
+                </div>
+                <div class="input">
+                    <input type="password" placeholder="Password" 
+                    required autocomplete="off" name="password">
+                </div>
 
-            <h3>choose your gender :</h3>
-            <input type = "radio" id="male" name = "gender" required>
-            <label for = "male" >Male </label>
-            <input type = "radio" id = "female" name = "gender">
-            <label for  = "female">Female</label>
-            <input type="radio" id = "others" name = "gender">
-            <label for = "others" >Others</label>  
-            <br>
+                <button type="submit" class="button">Register</button>
 
-            <button type = "submit" >Register</button>
+                    <div class="register-link">
+                        <p>
+                            Already having a account?
+                        <a
+                            href="/register">Register
+                        </a>
+                        </p>
+                    </div>
+            </form>
         </div>
-    </form>
-</div>
+    </div>
 {% endblock %}
