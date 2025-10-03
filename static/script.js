@@ -2,8 +2,10 @@
 let typingTimeout = null;
 let typingId = 0;
 
-// LocalStorage to count th enumber of times the API has been called
+// LocalStorage to count the number of times the API has been called
 let count = localStorage.getItem('count') || 0;
+// Using local storage to store mode
+let mode = localStorage.getItem('mode') || 'light';
 
 // A global flag to prevent error full API calls
 let isGood=1;
@@ -139,3 +141,4 @@ function call_route(){
         console.error('Fetch Error:', error);
     });
 }
+ 

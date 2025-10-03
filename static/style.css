@@ -5,6 +5,7 @@
     box-sizing: border-box;
     font-family:"Mona Sans", sans-serif;
 }
+
 #login_div{
     padding: 50px;
     display: flex;
@@ -171,7 +172,4 @@ hr.fade-in{
 }
 .heading{
     padding-top: 75px;
-}
-#entry_box{
-    margin: 150px;
 }
