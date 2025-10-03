@@ -66,6 +66,8 @@ function title_type(){
     // The first and second word  of the element
     let first = document.getElementById("first_word");
     let second = document.getElementById("second_word");
+    let title = document.getElementById("title");
+    title.style.textAlign = 'center';
     if (first){
         first.innerHTML = "";
     }
