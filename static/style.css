@@ -192,3 +192,6 @@ hr.fade-in{
     text-align: center;
     margin-top: 200px;
 }
+.layout-body:not(.Header){
+    background-color: #A3BCF9;
+}
