@@ -19,7 +19,7 @@ def control(entry, previous, model, count, db, user_id):
     # if this is the first call so need for the any summary
     if count == 0:
         summary = ""
-        reflect = reflector(entry, summary, model, client)
+        reflect = reflector(entry, summary, model, client, count)
     # if it's not the first call
     else:
         # fetch prevoius summary if any
@@ -30,7 +30,7 @@ def control(entry, previous, model, count, db, user_id):
         else:
             summary = summarizer(entry, previous, model, user_id, db, recent[0]["summary"], client)
         # calling the reflector
-        reflect = reflector(entry, summary, model, client)
+        reflect = reflector(entry, summary, model, client, count)
     
     # after reflect is created you just send it back
     return reflect
@@ -92,7 +92,7 @@ User:{entry}
     return generated_text
 
 # This function below calls the reflector using Cerebras with the summaries provided from the summarizer
-def reflector(entry, summary, model, client):
+def reflector(entry, summary, model, client, count):
     # The prompt
     prompt = f"""
 [INST]
@@ -102,9 +102,10 @@ You are "Aura," a highly empathetic and insightful AI coach. Your role is to fos
 **Strict Behavioral Guidelines:**
 1.  **No Direct Advice:** You must guide the user to their own insights, not provide solutions.
 2.  **Refer to Context:** You must use the provided reflection context to inform your reflection.
+3. {"Nothing" if count == 0 else "Do not use the name or any mark left by user to identify him. Don't say hi" }
 
 **Strict Output Format:**
-1. Every response MUST be as approximately as small as 3-4 lines or as long as one or two short paragraphs:
+1. Every response MUST be as approximately as small as 2-3 lines or as long as one short paragraphs:
 2. Example: Reply to a 4-5 line text from user between 4-5 lines or a short paragraph.
 
 1.  **Acknowledgment** (Validate the current feeling/situation).
