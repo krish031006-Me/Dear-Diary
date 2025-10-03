@@ -198,7 +198,7 @@ def history():
         few_lines = [] # an empty list for adding few demo lines
         for entry in entries:
             text = entry["entry"]
-            few_lines.append(text[:200])
+            few_lines.append(text[:50])
 
         return render_template("history.html", entries = entries, lines = few_lines)
     # if method is POST
