@@ -3,13 +3,25 @@
 
 {% block main %}
 
-    <h1 class="title_space">Write your thoughts out!</h1>
-    <form action="/space" method="post"></form>
-        <textarea id="entry_box" placeholder="Write you diary here!" autofocus autocomplete="off"></textarea>
-        <textarea id="AI_box" placeholder="For Aura" autocomplete="off"></textarea>
-        <div class="button_container">
-            <button type="submit" class="inside_button">Save</button>
+    <div class="wr_space">
+        <div class="writing-container">
+        <div class="space-head">
+            <h1>Unfold Your Thoughts</h1>
         </div>
-    </form>
+        
+        <form action="/m" method="post">
+            <div class="text-areas">
+                <div class="page">
+                    <textarea name="diary_entry" placeholder="Dear Diary..."></textarea>
+                </div>
+                <div class="page">
+                    <textarea name="aura_response" placeholder="For Aura" readonly></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="space-button">Save</button>
+        </form>
+    </div>
+    </div>
 
 {% endblock %}
