@@ -174,8 +174,23 @@ hr.fade-in{
     padding-top: 75px;
 }
 #entry_box{
-    margin-top: 100px;
+    margin-left: 100px;
+    margin-top: 200px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.6);
+    border: 3px solid black;
+    width: 500px;
+    height: 500px;
 }
 #AI_box{
-    margin-top: 150px;
+    margin-left: 300px;
+    margin-top: 200px;
+    margin-right: 50px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.6);
+    border: 3px solid black;
+    width: 500px;
+    height: 500px;
+}
+.title_space{
+    text-align: center;
+    margin-top: 200px;
 }
