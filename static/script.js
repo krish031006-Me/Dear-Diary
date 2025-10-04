@@ -107,6 +107,27 @@ function title_type(){
     type();
 };
 
+// A helper delay function
+function delay(ms){
+    /* here setTimeout will trigger resolve as the delay is over 
+        and as soon as resolve is triggered the promise is fulfilled so it will be returned and await will use it */
+    return new Promise(resolve => setTimeout(resolve, ms)); 
+}
+
+// THis is the function to make Aura the Ai look like typing
+async function auraTypes(reflection){
+    // Creating the char array
+    const reflectArr = reflection.split('');
+    // Getting the element
+    let box = document.getElementById("AI_box");
+    // Now we change the inner HTML with some delay
+    for(const char of reflectArr){ // A loop to iterate over every character the array
+        box.value += char;
+        // calling the helper
+        await delay(10);
+    }
+}
+
 // This is the function to call the flask route
 function call_route(){
     // Getting the element
@@ -124,13 +145,13 @@ function call_route(){
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ entry_text: entry, 
             times: count,
-            reflect_text: reflect
+            reflect_text: reflect.value
         })
     })
     .then(response => response.json())
-    .then(data => {
-        const cleanReflect = data.reflection.replace('<|eot_id|>', '');
-        reflect.value += cleanReflect + '\n\n';
+    .then(async(data) => {
+        await auraTypes(data.reflection);
+        reflect.value +='\n\n';
         // Updating count in localstorage
         count++;
         localStorage.setItem('count', count)
