@@ -6,9 +6,10 @@ from flask import Flask, render_template, session, request, redirect, flash, jso
 from cs50 import SQL
 from flask_session import Session
 from helpers import login_required, hashing
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 import re
-from reflection import control, analysis
+from reflection import control, analyze
+import json
 
 # Initialising the Flask app
 app = Flask(__name__)
@@ -36,8 +37,13 @@ def after_request(response):
 @app.route("/", methods = ["POST", "GET"])
 def dashboard():
     # if the method is get
-    if request.method == "GET":
-        return render_template("dashboard.html")
+    if request.method == "GET": 
+        # the count for the user-
+        count = db.execute("SELECT COUNT(*) AS count FROM entries WHERE user_id = ?", (session["user_id"]),)
+        if count[0]["count"] >= 7:
+            return render_template("dashboard.html", entries = "smth")
+        else:
+            return render_template("dashboard.html")
     # if it's post
     else:
         return render_template("dashboard.html")
@@ -172,9 +178,10 @@ def space():
         # calling the analysis function
         whole_entry = db.execute("SELECT * FROM entries WHERE user_id = ? AND entry = ?", session["user_id"], user_entry)
         try:
-            json = analysis(whole_entry, db)
+            print("outside")
+            json = analyze(whole_entry, db)
         except Exception as e:
-            print(f"Error running analysis {e}")
+            print(f"Error running analysis: {e}")
         
         # returning
         flash("Entry saved!")
@@ -259,6 +266,31 @@ def call_control():
         return jsonify({
             "reflection": reflect
         }), 200
+
+# this is the route for sending data to JS when called
+@app.route('/analysis', methods = ["GET", "POST"])
+def analysis():
+    # getting the count of the entries
+    count = db.execute("SELECT COUNT(*) AS count FROM analysis WHERE user_id = ? AND date_created >= date('now', 'weekday 0', '-6 days') ORDER BY date_created ASC", (session["user_id"]),)
+    count = count[0]["count"]
+
+    # fetching entries based on the count
+    if count >= 3:
+        entries = db.execute("SELECT * FROM analysis WHERE user_id = ? AND date_created >= date_created('now', 'weekday 0', '-6 days') ORDER BY date_created ASC", session["user_id"])
+    else:
+        entries = db.execute("SELECT * FROM analysis WHERE user_id = ? ORDER BY date_created DESC LIMIT 7", (session["user_id"]),)
+
+    json_list = [] # for storing the rows and all
+    for entry in entries:
+        json_list.append(entry)
+    # now we turn this list into a json
+    json_dict = {f"entry{i+1}": value for i, value in enumerate(json_list)}
+
+    json_string = json.dumps(json_dict, indent=2)
+
+    # returning the json_string
+    return json_string
+
 
 # Calling the app.py
 if __name__ == "__main__":
