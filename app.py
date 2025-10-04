@@ -190,7 +190,7 @@ def stats():
 @login_required
 def history():
     # getting all the entries done by the user
-    entries = db.execute("SELECT * FROM entries WHERE user_id = ?", (session["user_id"]),)
+    entries = db.execute("SELECT * FROM entries WHERE user_id = ? ORDER BY written_date DESC", (session["user_id"]),)
     if entries == []:
         return render_template("history.html")
     # if method is GET
