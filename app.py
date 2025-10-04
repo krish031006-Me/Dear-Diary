@@ -147,7 +147,7 @@ def logout():
     return redirect("/login")
 
 # This is the trends route to show trends 
-@app.route("/trends")
+@app.route("/trends", methods = ["GET"])
 @login_required
 def trends():
     # if method is GET
@@ -158,7 +158,7 @@ def trends():
         ...
 
 # This is the route to open a writing space
-@app.route("/space")
+@app.route("/space", methods = ["POST", "GET"])
 @login_required
 def space():
     # if method is GET
@@ -166,13 +166,13 @@ def space():
         return render_template("space.html")
     # if method is POST
     else:
-        user_entry = request.form.get("entry_box")
+        user_entry = request.form.get("diary_entry")
         db.execute("INSERT INTO entries (user_id, entry) VALUES (?, ?)", session["user_id"], user_entry)
         flash("Entry saved!")
         return redirect("/")
 
 # This is the route for stats page
-@app.route("/stats")
+@app.route("/stats", methods = ["GET"])
 @login_required
 def stats():
     # if method is GET
@@ -207,7 +207,7 @@ def history():
         return render_template("space.html", entry=...)
 
 # This is the sharing route for the entries if needed
-@app.route("/share")
+@app.route("/share", methods = ["GET"])
 @login_required
 def share():
     # if method is GET
@@ -238,10 +238,13 @@ def call_control():
             }), 500
 
         # modifying the return AI refelction before returning    
+        AI_reflect = AI_reflect.replace("/", "")
+        AI_reflect = AI_reflect.replace("\\", "")
         if '[' in AI_reflect:
             reflect = (AI_reflect.split('['))[0]
         else:
             reflect = (AI_reflect.split('<'))[0]
+
     
         # returning the reflection from Cerebras call 
         return jsonify({
