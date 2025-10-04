@@ -8,6 +8,7 @@
 # import useful libraries
 import os
 from cerebras.cloud.sdk import Cerebras
+import json
 
 # the main function to control cerebras_call
 def control(entry, previous, model, count, db, user_id):
@@ -128,7 +129,7 @@ User:{entry}
     # getting the result from Cerebaras
     completion = client.completions.create(
         prompt=prompt,
-        max_tokens=200,
+        max_tokens=160,
         model=model,
     )
 
@@ -141,3 +142,75 @@ User:{entry}
         print(f"Error extracting text from reflector: {e}")
         # Fail-safe response
         return "I apologize, I seem to have encountered a technical issue. Can you please try asking again?"
+    
+# This is the function to create an analysis of th ewhole entry as the user saves it and then store
+def analysis(whole, db):
+    # error checking 
+    if whole == []:
+        print("user row is empty")
+        return None
+    # the entry text and the date
+    entry_text = whole[0]["entry"]
+    date = whole[0]["date_only"]
+    user_id = whole[0]["user_id"]
+    # the prompt for the AI
+    prompt = f"""
+[INST]
+<<SYS>>
+You are a highly empathetic and insightful AI assistant specializing in mood and sentiment analysis from personal texts. Your primary goal is to analyze the user's diary entry and return a structured JSON object with your findings.
+
+**Core Instructions:**
+1.  You MUST return ONLY a valid JSON object. Do not include any extra text, explanations, or markdown formatting like ```json.
+2.  The JSON object must strictly adhere to the schema and keys provided below.
+3.  If you cannot confidently determine a field, use the specified default values ("unknown", 0, or an empty array/string).
+4.  Base your analysis solely on the text provided in the diary entry and the context date.
+
+**JSON Schema:**
+{{
+  "primary_emotion": "happy | sad | angry | anxious | calm | neutral | unknown",
+  "day_of_entry": "The day of the week as a string (e.g., 'Saturday')",
+  "sentiment_score": -5 to 5,
+  "emotion_intensity": 0 to 100,
+  "energy_level": "low | medium | high | unknown",
+  "triggers": ["keyword1", "keyword2", ...],
+  "positive_highlight": "one sentence about what went well; empty string if none",
+  "negative_highlight": "one sentence about what went wrong; empty string if none",
+  "summary": "one-sentence natural language summary of the mood; if unclear, write 'Could not detect clear mood from this entry.'"
+}}
+<</SYS>>
+
+Analyze the following diary entry. The entry was written on **{date}**. Return ONLY the valid JSON object as instructed.
+
+Diary entry:
+{entry_text}
+[/INST]
+""".strip()
+     
+     # getting the cerbras API key stored in environment variables
+    client = Cerebras(
+        api_key=os.environ.get("CEREBRAS_API_KEY")
+    )
+
+    # calling the Cerebras AI to do the job
+    completion = client.completions.create(
+        prompt=prompt,
+        max_tokens=350,
+        model="llama-4-scout",
+    )
+
+    # Fetching the result from completion
+    try:
+        # Extract and strip the final generated text
+        generated_json = completion.choices[0].text.strip()
+        # validating the json
+        validated = json.loads(generated_json)
+        # convert back to string
+        to_string = json.dumps(validated)
+        # appending in table
+        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, to_string)
+    except Exception as e:
+        # returning
+        print(f"Error extracting text from analysis: {e}")
+        return None
+
+# THis is the function that will handle creating kind of like a short summary for all the entries
