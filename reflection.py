@@ -129,7 +129,7 @@ User:{entry}
     # getting the result from Cerebaras
     completion = client.completions.create(
         prompt=prompt,
-        max_tokens=160,
+        max_tokens=120,
         model=model,
     )
 
@@ -143,8 +143,9 @@ User:{entry}
         # Fail-safe response
         return "I apologize, I seem to have encountered a technical issue. Can you please try asking again?"
     
-# This is the function to create an analysis of th ewhole entry as the user saves it and then store
-def analysis(whole, db):
+# This is the function to create an analysis of the whole entry as the user saves it and then store
+def analyze(whole, db):
+    print("inside")
     # error checking 
     if whole == []:
         print("user row is empty")
@@ -195,19 +196,17 @@ Diary entry:
     completion = client.completions.create(
         prompt=prompt,
         max_tokens=350,
-        model="llama-4-scout",
+        model="llama-3.3-70b",
     )
-
+    print("got here")
     # Fetching the result from completion
-    try:
+    try: 
         # Extract and strip the final generated text
-        generated_json = completion.choices[0].text.strip()
-        # validating the json
-        validated = json.loads(generated_json)
+        generated_json = completion.choices[0].text.strip()  
         # convert back to string
-        to_string = json.dumps(validated)
+        to_string = json.dumps(generated_json)
         # appending in table
-        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, to_string)
+        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, to_string) 
     except Exception as e:
         # returning
         print(f"Error extracting text from analysis: {e}")
