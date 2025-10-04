@@ -8,7 +8,7 @@ from flask_session import Session
 from helpers import login_required, hashing
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
-from reflection import control
+from reflection import control, analysis
 
 # Initialising the Flask app
 app = Flask(__name__)
@@ -166,8 +166,17 @@ def space():
         return render_template("space.html")
     # if method is POST
     else:
+        # adding the entry to the database storing it
         user_entry = request.form.get("diary_entry")
         db.execute("INSERT INTO entries (user_id, entry) VALUES (?, ?)", session["user_id"], user_entry)
+        # calling the analysis function
+        whole_entry = db.execute("SELECT * FROM entries WHERE user_id = ? AND entry = ?", session["user_id"], user_entry)
+        try:
+            json = analysis(whole_entry, db)
+        except Exception as e:
+            print(f"Error running analysis {e}")
+        
+        # returning
         flash("Entry saved!")
         return redirect("/")
 
