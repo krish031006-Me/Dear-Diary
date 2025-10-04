@@ -225,27 +225,6 @@ hr.fade-in {
    ============================================= */
 
 /* Styles for the user's main diary entry textarea */
-#entry_box {
-  margin-left: 100px;
-  margin-top: 100px;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); /* Adds a shadow for depth */
-  border: 3px solid black;
-  width: 500px;
-  height: 500px;
-  padding: 10px 20px;
-}
-
-/* Styles for the AI interaction textarea */
-#AI_box {
-  margin-left: 300px;
-  margin-top: 100px;
-  margin-right: 50px;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
-  border: 3px solid black;
-  width: 500px;
-  height: 500px;
-  padding: 5px 15px;
-}
 
 /* Main title for the diary entry page */
 .title_space {
