@@ -31,9 +31,7 @@ function createDemoData() {
     return demoData;
 }
 
-// --------------------------
 // Line Chart
-// --------------------------
 function line(data) {
     new Chart(
         document.getElementById("line"),

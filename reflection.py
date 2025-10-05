@@ -125,7 +125,8 @@ You are "Aura," a highly empathetic and insightful AI coach. Your role is to fos
 <</SYS>>
 
 User:{entry}
-[/INST]""".strip()
+[/INST]
+""".strip()
 
     # getting the result from Cerebaras
     completion = client.completions.create(
@@ -157,34 +158,41 @@ def analyze(whole, db):
     user_id = whole[0]["user_id"]
     # the prompt for the AI
     prompt = f"""
-[INST]
 <<SYS>>
-You are a highly empathetic and insightful AI assistant specializing in mood and sentiment analysis from personal texts. Your primary goal is to analyze the user's diary entry and return a structured JSON object with your findings.
+You are a highly specialized AI for mood and sentiment analysis. Your sole purpose is to analyze the user's diary entry and return a single, structured JSON object with your findings.
 
 **Core Instructions:**
-1.  You MUST return ONLY a valid JSON object. Do not include any extra text, explanations, or markdown formatting like ```json.
+1.  You MUST return ONLY a valid JSON object. Do not include any extra text, explanations, notes, or markdown formatting like ```json.
 2.  The JSON object must strictly adhere to the schema and keys provided below.
-3.  If you cannot confidently determine a field, use the specified default values ("unknown", 0, or an empty array/string).
-4.  Base your analysis solely on the text provided in the diary entry and the context date.
+3.  If you cannot confidently determine a field, use the specified default values ("neutral" or 0).
+4.  Base your analysis exclusively on the text provided in the diary entry.
 
 **JSON Schema:**
 {{
-  "primary_emotion": "happy | sad | angry | anxious | calm | neutral | unknown",
-  "day_of_entry": "The day of the week as a string (e.g., 'Saturday')",
+  "primary_emotion": "happy | sad | angry | anxious | calm | neutral",
   "sentiment_score": -5 to 5,
   "emotion_intensity": 0 to 100,
-  "energy_level": "low | medium | high | unknown",
-  "triggers": ["keyword1", "keyword2", ...],
-  "positive_highlight": "one sentence about what went well; empty string if none",
-  "negative_highlight": "one sentence about what went wrong; empty string if none",
-  "summary": "one-sentence natural language summary of the mood; if unclear, write 'Could not detect clear mood from this entry.'"
+  "energy_level": "low | medium | high | neutral"
 }}
 <</SYS>>
 
-Analyze the following diary entry. The entry was written on **{date}**. Return ONLY the valid JSON object as instructed.
+[INST]
+Analyze the following diary entry. Return ONLY the valid JSON object as instructed.
 
-Diary entry:
-{entry_text}
+**Diary entry:**
+"What a fantastic day! I finally got the promotion I've been working so hard for. I feel like I'm on top of the world. Celebrated with friends tonight, just pure joy."
+[/INST]
+{{
+  "primary_emotion": "happy",
+  "sentiment_score": 5,
+  "emotion_intensity": 95,
+  "energy_level": "high"
+}}
+[INST]
+Analyze the following diary entry. Return ONLY the valid JSON object as instructed.
+
+**Diary entry:**
+"{entry_text}"
 [/INST]
 """.strip()
      
@@ -196,54 +204,26 @@ Diary entry:
     # calling the Cerebras AI to do the job
     completion = client.completions.create(
         prompt=prompt,
-        max_tokens=350,
+        max_tokens=250,
         model="llama-3.3-70b",
+        temperature=0,
+        stop=["\n\n"]
     )
     # Fetching the result from completion
     try: 
         # Extract and strip the final generated text
         generated_json = completion.choices[0].text.strip()  
-        # convert back to string
-        to_string = json.dumps(generated_json)
+        
         # now trying to clean this string
-        analysis = clean_analysis(to_string)
-        print(f"ANALYSIS:{analysis}")
+        if '}' in raw_text:
+            raw_text = raw_text[:raw_text.rfind('}')+1]
+        else:
+            return None
+        data = json.loads(raw_text)
+        print(f"ANALYSIS:{data}")
         # appending in table
-        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, analysis) 
+        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, data) 
     except Exception as e:
         # returning
         print(f"Error extracting text from analysis: {e}")
         return None
-
-# THis is the function that will handle the cleaning of the response from AI
-def clean_analysis(text):
-    # Remove everything after [/INST] (including it)
-    text = re.sub(r'\[\/INST\].*$', '', text, flags=re.DOTALL)
-    text = re.sub(r'<\|eot_id\|>.*$', '', text, flags=re.DOTALL)
-    text = text.replace("\n", "")
-    text = text.replace(",n", ",")
-    text = text.replace("\\", "")
-    text = text.replace("|", "")
-    # Remove wrapping quotes if any
-    text = text.strip().strip('"').strip()
-    return text
-
-def more_clean(entries):
-    cleaned_entries = []
-
-    for entry in entries:
-        try:
-            clean_text = clean_analysis(entry["analysis"])
-            parsed = json.loads(clean_text) if clean_text else {}
-            cleaned_entries.append({
-                "analysis__id": entry["analysis__id"],
-                "user_id": entry["user_id"],
-                "date_created": entry["date_created"],
-                "analysis": clean_text,
-                "parsed": parsed
-            })
-        except Exception as e:
-            print("Error parsing entry:", entry, e)
-            cleaned_entries.append({**entry, "parsed": {}})
-
-    return cleaned_entries
