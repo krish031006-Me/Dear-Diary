@@ -335,3 +335,78 @@ hr.fade-in {
 .space-button:hover {
     background-color: #A0522D; /* A slightly lighter sienna color on hover */
 }
+
+/* This is the CSS for dashboard.html */
+#bar{
+  border: 2px solid black;
+  background: #f9f9f9;
+  border-radius: 10px;
+  display:flex;
+  justify-content: center;
+}
+#doughnut{
+  border: 2px solid black;
+  background: #f9f9f9;
+  border-radius: 10px;
+  display:flex;
+  justify-content: center;
+}
+#line {
+  border: 2px solid black;
+  background: #f9f9f9;
+  border-radius: 10px;
+}
+.line{
+  width: 700px;
+  height:500px;
+}
+.bar{
+  width: 700px;
+  height: 500px;
+}
+.doughnut{
+  width: 500px;
+  height: 500px;
+}
+.centered{
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.font{
+  font-family: "Dancing Script", sans-serif;
+  font-size: 80px;
+}
+.inline{
+  display: flex;
+  justify-content: center;
+  gap:50px;
+}
+.righty{
+  font-family: "Dancing Script", cursive;
+  text-align: right;
+  margin-right:30px;
+}
+.font_mona{
+  font-family: "Mona Sans", sans-serif;
+}
+.short{
+  font-size: 40px;
+  text-align: center;
+}
+#dashboard{
+  margin-bottom: 180px;
+}
+.enter_button{
+  background-color: #fff;
+  color:#113d83;
+  border: 2px solid black;
+  box-shadow: 0 0 10px rgba(0 , 0 , 0 , .1);
+  border-radius: 5%;
+}
+.center{
+  text-align: center;
+}
+.margin{
+  margin-top: 250px;
+}
