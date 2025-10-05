@@ -9,6 +9,7 @@
 import os
 from cerebras.cloud.sdk import Cerebras
 import json
+import re
 
 # the main function to control cerebras_call
 def control(entry, previous, model, count, db, user_id):
@@ -198,18 +199,51 @@ Diary entry:
         max_tokens=350,
         model="llama-3.3-70b",
     )
-    print("got here")
     # Fetching the result from completion
     try: 
         # Extract and strip the final generated text
         generated_json = completion.choices[0].text.strip()  
         # convert back to string
         to_string = json.dumps(generated_json)
+        # now trying to clean this string
+        analysis = clean_analysis(to_string)
+        print(f"ANALYSIS:{analysis}")
         # appending in table
-        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, to_string) 
+        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, analysis) 
     except Exception as e:
         # returning
         print(f"Error extracting text from analysis: {e}")
         return None
 
-# THis is the function that will handle creating kind of like a short summary for all the entries
+# THis is the function that will handle the cleaning of the response from AI
+def clean_analysis(text):
+    # Remove everything after [/INST] (including it)
+    text = re.sub(r'\[\/INST\].*$', '', text, flags=re.DOTALL)
+    text = re.sub(r'<\|eot_id\|>.*$', '', text, flags=re.DOTALL)
+    text = text.replace("\n", "")
+    text = text.replace(",n", ",")
+    text = text.replace("\\", "")
+    text = text.replace("|", "")
+    # Remove wrapping quotes if any
+    text = text.strip().strip('"').strip()
+    return text
+
+def more_clean(entries):
+    cleaned_entries = []
+
+    for entry in entries:
+        try:
+            clean_text = clean_analysis(entry["analysis"])
+            parsed = json.loads(clean_text) if clean_text else {}
+            cleaned_entries.append({
+                "analysis__id": entry["analysis__id"],
+                "user_id": entry["user_id"],
+                "date_created": entry["date_created"],
+                "analysis": clean_text,
+                "parsed": parsed
+            })
+        except Exception as e:
+            print("Error parsing entry:", entry, e)
+            cleaned_entries.append({**entry, "parsed": {}})
+
+    return cleaned_entries

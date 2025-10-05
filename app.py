@@ -178,6 +178,11 @@ def space():
         return render_template("space.html")
     # if method is POST
     else:
+        # checking if this is the first entry
+        num = db.execute("SELECT COUNT(*) AS num FROM users WHERE user_id = ?", (session["user_id"]),)
+        count = num[0]["num"]
+        if count == 0:
+            db.execute("UPDATE users SET status = 'done' WHERE user_id = ?", (session["user_id"]),)
         # adding the entry to the database storing it
         user_entry = request.form.get("diary_entry")
         db.execute("INSERT INTO entries (user_id, entry) VALUES (?, ?)", session["user_id"], user_entry)
@@ -290,14 +295,11 @@ def analysis():
     else:
         entries = db.execute("SELECT * FROM analysis WHERE user_id = ? ORDER BY date_created DESC LIMIT 7", (session["user_id"]),)
 
-    json_list = [] # for storing the rows and all
-    for entry in entries:
-        json_list.append(entry)
     # now we turn this list into a json
-    json_dict = {f"entry{i+1}": value for i, value in enumerate(json_list)}
+    json_dict = {f"entry{i+1}": value for i, value in enumerate(entries)}
 
     json_string = json.dumps(json_dict, indent=2)
-
+    print(json_string)
     # returning the json_string
     return json_string
 
