@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async function(event){
     const analysisData = await getAnalysis();
     // calling to create graphs
     if (analysisData){
+        console.log("inside js");
         line(analysisData);
         doughnut(analysisData);
         bar(analysisData);
