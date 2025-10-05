@@ -2,7 +2,7 @@
     It contains all the web routes and all the backend logic that will run"""
 
 # Including all the libraries
-from flask import Flask, render_template, session, request, redirect, flash, jsonify
+from flask import Flask, render_template, session, request, redirect, flash, jsonify, url_for
 from cs50 import SQL
 from flask_session import Session
 from helpers import login_required, hashing
@@ -212,7 +212,25 @@ def history():
         return render_template("history.html", entries = entries, lines = few_lines)
     # if method is POST
     else:
-        return render_template("space.html", entry=...)
+        # get the entry_id and the user_id hidden in the space.html
+        user_id = request.form.get("user_id")
+        entry_id = request.form.get("entry_id")
+        # returning the template
+        return redirect(url_for("open_entry", entry_id=entry_id, user_id = user_id))
+
+# This is the route to open the entry in space.html
+@app.route("/open", methods = ["GET", "POST"])
+@login_required
+def open_entry():
+    # fetching the details
+    entry_id = request.args.get("entry_id")
+    user_id = request.args.get("user_id")
+
+    # fetching the entry
+    entry = db.execute("SELECT entry FROM entries WHERE entry_id = ? AND user_id = ?", entry_id, user_id)
+    # returning to the template
+    entry = entry[0]["entry"]
+    return render_template("space.html", entry = entry)
 
 # This is the sharing route for the entries if needed
 @app.route("/share", methods = ["GET"])
