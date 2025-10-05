@@ -39,7 +39,7 @@ Dear Diary is a personal journaling web application that helps users track their
 
 3. **Run the app**
     ```bash
-    flask run
+    python app.py
     ```
     Open http://127.0.0.1:5000 in your browser.
 
