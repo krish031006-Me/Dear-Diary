@@ -61,6 +61,7 @@ Dear Diary is a personal journaling web application that helps users track their
     │   └── script.js             # main JS file
     │   └── demo.js               # for demo JS graphs
     │   └── charts.js             # for dynamic chart JS graphs
+    │   └── mot.jpeg              # for dynamic chart JS graphs
     ├── requirements.txt      # Python dependencies
     └── README.md             # Project documentation
 
