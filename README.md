@@ -86,6 +86,6 @@ Dear Diary is a personal journaling web application that helps users track their
 
 **Author**
 
-    Krish Bhardwaj
+    Code Catalysts ~ Krish, Sahil, Hardik
     Computer Science Engineering Student
     Passionate about programming, AI, and web development
