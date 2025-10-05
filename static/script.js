@@ -4,8 +4,6 @@ let typingId = 0;
 
 // LocalStorage to count the number of times the API has been called
 let count = localStorage.getItem('count') || 0;
-// Using local storage to store mode
-let mode = localStorage.getItem('mode') || 'light';
 
 // A global flag to prevent error full API calls
 let isGood=1;
@@ -37,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     // Calling when it exists and the inner HTML is greater than 50 characters
     if(inputField && isGood === 1){
         // Calling the debouncer to run call_route when the user doen't press anything fro 8 sec straight
-        const debouncedCall = debounce(call_route, 8000);
+        const debouncedCall = debounce(call_route, 6000);
         inputField.addEventListener('input', debouncedCall);
     }   
 });
