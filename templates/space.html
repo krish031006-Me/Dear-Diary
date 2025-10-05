@@ -8,19 +8,31 @@
         <div class="space-head">
             <h1>Unfold Your Thoughts</h1>
         </div>
-        
-        <form action="/space" method="post">
-            <div class="text-areas">
-                <div class="page">
-                    <textarea name="diary_entry" id="entry_box" placeholder="Dear Diary..." autofocus></textarea>
+        {% if entry %}
+            <form action="/space" method="post">
+                <div class="text-areas">
+                    <div class="page">
+                        <textarea name="diary_entry" id="entry_box" placeholder="Dear Diary..." autofocus>{{ entry }}</textarea>
+                    </div>
+                    <div class="page">
+                        <textarea name="aura_response" id="AI_box" placeholder="For Aura" readonly></textarea>
+                    </div>
                 </div>
-                <div class="page">
-                    <textarea name="aura_response" id="AI_box" placeholder="For Aura" readonly></textarea>
+                <button type="submit" class="space-button">Save</button>
+            </form>
+        {% else %}
+            <form action="/space" method="post">
+                <div class="text-areas">
+                    <div class="page">
+                        <textarea name="diary_entry" id="entry_box" placeholder="Dear Diary..." autofocus></textarea>
+                    </div>
+                    <div class="page">
+                        <textarea name="aura_response" id="AI_box" placeholder="For Aura" readonly></textarea>
+                    </div>
                 </div>
-            </div>
-            
-            <button type="submit" class="space-button">Save</button>
-        </form>
+                <button type="submit" class="space-button">Save</button>
+            </form>
+        {% endif %}
     </div>
     </div>
 
