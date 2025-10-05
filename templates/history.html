@@ -13,10 +13,10 @@
                 <div class="row g-4">
                     {% for entry in entries %}
                         <div class="col-lg-4 border border-dark rounded p-3">
-                            <form action="/article" method="post">
+                            <form action="/history" method="post">
                                 <h3 class="fw-normal" style="text-align: center;" id="title">{{ entry.date_only }}</h3>
                                 <p>{{ lines[loop.index0] }}</p>
-                                <input type="hidden" name="entry_id" value="{{ entry.letter_id }}">
+                                <input type="hidden" name="entry_id" value="{{ entry.entry_id }}">
                                 <input type="hidden" name="user_id" value="{{ entry.user_id }}">
                                 <p><button class="inside_button" id="read_btn" type="submit">Read it!</button></p>
                             </form>
