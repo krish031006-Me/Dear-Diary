@@ -64,7 +64,8 @@ The project is organized into several key files that separate concerns:
 │   ├── style.css       # All CSS styles for the application.
 │   └── script.js       # Core JavaScript for UI interactions and API calls.
 │   └── charts.js       # JavaScript for rendering charts on the dashboard.
-│
+│   └── demo.js         # for the demo graphs
+|            
 └── templates/
     ├── layout.html     # Base HTML template with header and navigation.
     ├── dashboard.html  # Main dashboard with charts.
