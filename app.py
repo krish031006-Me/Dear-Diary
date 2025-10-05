@@ -38,15 +38,32 @@ def after_request(response):
 def dashboard():
     # if the method is get
     if request.method == "GET": 
-        # the count for the user-
-        count = db.execute("SELECT COUNT(*) AS count FROM entries WHERE user_id = ?", (session["user_id"]),)
-        if count[0]["count"] >= 7:
-            return render_template("dashboard.html", entries = "smth")
-        else:
-            return render_template("dashboard.html")
+        # checking if user is logged in or not
+        user_id = session.get("user_id") # checking without error
+
+        # For representing stats-
+        num = db.execute("SELECT COUNT(*) AS num FROM users WHERE status = 'done'")
+        count = num[0]["num"]
+        num_entry = db.execute("SELECT COUNT(*) AS num_entry FROM analysis")
+        entries = num_entry[0]["num_entry"]
+
+        if not user_id:
+            return render_template("dashboard.html", demo=True, users = count, entries = entries)
+
+        # checking if there are enough entries done by the user
+        count = db.execute("SELECT COUNT(*) AS count FROM analysis WHERE user_id = ?", (user_id),)
+        count = count[0]["count"]
+        
+        # conditions for count
+        if count <= 3:
+            return render_template("dashboard.html", demo = True, users = count, entries = entries) # running the demo graphs
+        
+        # The final return statement
+        return render_template("dashboard.html", users = count, entries = entries) # calling the actual graphs
+        
     # if it's post
     else:
-        return render_template("dashboard.html")
+        return render_template("dashboard.html", users = count, entries = entries)
 
 # This is the login route for the project
 @app.route("/login", methods = ["GET", "POST"])
@@ -152,17 +169,6 @@ def logout():
     # call the login route
     return redirect("/login")
 
-# This is the trends route to show trends 
-@app.route("/trends", methods = ["GET"])
-@login_required
-def trends():
-    # if method is GET
-    if request.method == "GET":
-        return render_template("trends.html")
-    # if method is POST
-    else:
-        ...
-
 # This is the route to open a writing space
 @app.route("/space", methods = ["POST", "GET"])
 @login_required
@@ -186,20 +192,6 @@ def space():
         # returning
         flash("Entry saved!")
         return redirect("/")
-
-# This is the route for stats page
-@app.route("/stats", methods = ["GET"])
-@login_required
-def stats():
-    # if method is GET
-    if request.method == "GET":
-        # Getting the data to pass
-        num = db.execute("SELECT COUNT(*) AS num FROM users WHERE status = 'done'")
-        count = num[0]["num"]
-        num_entry = db.execute("SELECT COUNT(*) AS num_entry FROM users")
-        entries = num_entry[0]["num_entry"]
-        # rendering the template
-        return render_template("stats.html", users = count, entries = entries)
 
 # This is the history route
 @app.route("/history", methods = ["GET", "POST"])
@@ -276,7 +268,7 @@ def analysis():
 
     # fetching entries based on the count
     if count >= 3:
-        entries = db.execute("SELECT * FROM analysis WHERE user_id = ? AND date_created >= date_created('now', 'weekday 0', '-6 days') ORDER BY date_created ASC", session["user_id"])
+        entries = db.execute("SELECT * FROM analysis WHERE user_id = ? AND date_created >= date('now', 'weekday 0', '-6 days') ORDER BY date_created ASC", session["user_id"])
     else:
         entries = db.execute("SELECT * FROM analysis WHERE user_id = ? ORDER BY date_created DESC LIMIT 7", (session["user_id"]),)
 
