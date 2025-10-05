@@ -7,17 +7,49 @@
     <p id = "title"><span id="first_word"></span><span id="second_word"></span></p>
     <!--THe horizontal rule-->
     <hr class = "fade-in">
-
+    <h3 class="righty">~Small entries, big insights.</h3>
+    <br><br>
     <!--Printing the trends for the user-->
-    <h1>For and about you-</h1>
-    {% if entries %}
-        <div style="width: 500px;"><canvas id="line"></canvas></div>
-        <div style="width: 500px;"><canvas id="bar"></canvas></div>
-        <div style="width: 500px;"><canavs id="donut"></canavs></div>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="/static/charts.js"></script>
+    <div id="dashboard">
+        <h1 class="centered font">For and about you-</h1>
+        <br><br>
+        {% if demo %}
+        <p class="center font_mona"><strong>This is just a demo. Log In to see your actual insight.</strong></p>
+        {% endif %}
+        <h2 class="centered">Your Emotion Intensity Score-</h2>
+        <br>
+        <div class="inline">
+            <div class="line"><canvas id="line"></canvas></div>
+            <div></div>
+        </div>
+        <h2 class="centered">Your Entries per emotion-</h2>
+        <br>    
+        <div class="inline">
+            <div class="bar"><canvas id="bar"></canvas></div>
+        <br><br>
+        <div class="doughnut"><canvas id="doughnut"></canavs></div>
+        </div>
+        <br>
+        <form action="/space" method="get">
+            <h2 class="font_mona centered">Get to know your thought and moods. Write you first entry <span><button class="enter_button">
+                Add Entry
+            </button></span></h2>
+        </form>
+        <br><br>
+        <h1 class="centered font">Some stats about us-</h1>
+        <br><br>
+        <h3 class="short font">Total users writing on dearDiary- </h3>
+        <br>
+        <h3 class="short font_mona">{{ users }}</h3>
+        <br><br>
+        <h3 class="short font">Total entries published on dearDiary- </h3>
+        <br>
+        <h3 class="short font_mona">{{ entries }}</h3>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% if demo %}
+        <script src="/static/demo.js"></script>
     {% else %}
-        <h1>You don't have enough entries yet!</h1>
+        <script src="/static/charts.js"></script>
     {% endif %}
-    
 {% endblock %}
