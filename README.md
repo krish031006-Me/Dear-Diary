@@ -78,6 +78,7 @@ Dear Diary is a personal journaling web application that helps users track their
     Integrate with mobile apps.
     Enable exporting journals as PDFs.
     Add sentiment comparison between entries over weeks/months.
+    Share the diaries with other user.
 
 **License**
 
