@@ -72,3 +72,109 @@ The project is organized into several key files that separate concerns:
     ├── register.html   # User registration page.
     ├── space.html      # The diary writing interface.
     └── ...             # Other HTML files.
+
+⚙️ Getting Started
+To get a local copy up and running, follow these simple steps.
+
+Prerequisites
+Python 3.8+
+
+pip (Python package installer)
+
+Installation & Setup
+Clone the repository:
+
+Bash
+
+git clone https://github.com/your-username/dearDiary.git
+cd dearDiary
+Set up your Cerebras API Key:
+Create a file named .env in the root of the project directory. Add your API key to this file.
+
+CEREBRAS_API_KEY="your-secret-api-key-goes-here"
+The reflection.py file is already configured to load this key.
+
+Create and activate a virtual environment:
+
+Bash
+
+python -m venv venv
+source venv/bin/activate  # On Windows, use: venv\Scripts\activate
+Install Python dependencies:
+
+Bash
+
+pip install -r requirements.txt
+Initialize the database:
+Run the following command in your terminal to create the users.db file and set up all the necessary tables using the schema.sql file.
+
+Bash
+
+sqlite3 users.db < schema.sql
+Running the Application
+Start the Flask server:
+
+Bash
+
+flask run
+Open your browser and navigate to http://127.0.0.1:5000 to see the application in action!
+
+🤝 Contributing
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+
+Fork the Project
+
+Create your Feature Branch (git checkout -b feature/AmazingFeature)
+
+Commit your Changes (git commit -m 'Add some AmazingFeature')
+
+Push to the Branch (git push origin feature/AmazingFeature)
+
+Open a Pull Request
+
+requirements.txt
+Plaintext
+
+Flask
+Flask-Session
+cs50
+Werkzeug
+cerebras-cloud-sdk
+schema.sql
+SQL
+
+CREATE TABLE "users" (
+    "user_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "email" TEXT NOT NULL UNIQUE,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "status" TEXT DEFAULT 'done'
+);
+
+CREATE TABLE "entries" (
+    "entry_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "entry" TEXT NOT NULL,
+    "written_date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "date_only" DATE DEFAULT (date('now')),
+    FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
+);
+
+CREATE TABLE "analysis" (
+    "analysis_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "analysis" TEXT, -- Storing the JSON as TEXT
+    "date_created" DATE DEFAULT (date('now')),
+    FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
+);
+
+CREATE TABLE "recent_summary" (
+    "summary_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "email" TEXT NOT NULL,
+    "summary" TEXT,
+    "date_summarized" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
+);
