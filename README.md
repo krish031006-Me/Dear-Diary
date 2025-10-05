@@ -1,181 +1,90 @@
-# Dear-Diary
-This is our project repo for WeMakeDevs FutureStack GenAI Hackathon.
+# Dear Diary 📝
 
-dearDiary 📝✨
-dearDiary is a smart mental health journaling application designed to help users track their emotional well-being through insightful analysis and AI-powered reflections. It provides a safe and private space to pen down thoughts, and in return, offers a deeper understanding of one's emotional patterns over time.
+Dear Diary is a personal journaling web application that helps users track their thoughts, emotions, and daily reflections. Using AI analysis, it provides insights into mood patterns over time and visualizes trends with interactive charts.
 
-🚀 Introduction
-In our fast-paced world, taking a moment for introspection is more important than ever. dearDiary is more than just a digital notebook; it's a personal mental wellness companion. By leveraging the power of a Large Language Model (Llama-3), it performs two key functions:
+---
 
-Real-time Reflection: Our AI assistant, Aura, provides live, empathetic feedback as you write, helping you explore your thoughts without giving direct advice.
+## Features
 
-Deep Emotional Analysis: After you save an entry, the AI performs a detailed analysis to extract key emotional metrics, which are then used to power your personal analytics dashboard.
+- **User Accounts**: Secure sign-up and login functionality.
+- **Daily Journaling**: Write reflections, thoughts, or experiences.
+- **AI Mood Analysis**: Automatically analyze entries for primary emotions and triggers.
+- **Pattern Visualization**: Display mood trends over time using interactive charts.
+- **Responsive Design**: Works well on desktop and mobile devices.
 
-✨ Features
-Secure User Authentication: Safe and secure registration and login system with password hashing to ensure your journal remains private.
+---
 
-Dual AI System:
+## Tech Stack
 
-Live Reflections: Get real-time, thoughtful feedback from Aura, our integrated AI coach, as you write.
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Python, Flask
+- **Database**: SQLite
+- **AI Integration**: LLMs for mood analysis (Cerebras / OpenAI models)
+- **Session Management**: Flask-Session
 
-In-depth Analysis: Upon saving, entries are analyzed to identify primary emotions, sentiment scores, emotional intensity, and potential triggers.
+---
 
-Emotional Analytics Dashboard: Visualize your emotional journey with interactive charts:
+## Installation
 
-Line Chart: Track your emotional intensity over time.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/dear-diary.git
+   cd dear-diary
+   ```
 
-Bar Chart: See the frequency of different emotions (Happy, Sad, Angry, etc.).
+2. **Install dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Doughnut Chart: Understand the proportion of each emotion in your overall mood.
+3. **Run the app**
+    ```bash
+    flask run
+    ```
+    Open http://127.0.0.1:5000 in your browser.
 
-Intuitive Writing Space: A beautiful, distraction-free two-page layout that mimics a real diary.
+4. **Usage**
+    Sign up or log in with your account.    
+    Add daily journal entries.
+    Let AI analyze your mood and emotions.
+    Check your dashboard for mood patterns and insights.
 
-Entry History: Easily browse, read, and revisit your past journal entries.
+**Project Structure**
 
-Demo Mode: New users can explore a demo dashboard to see the powerful analytics in action before signing up.
+    dear-diary/
+    ├── app.py                # Main Flask application
+    ├── helpers.py            # Contains the helper function 
+    ├── reflection.py         # Contains the AI logic
+    ├── templates/            # HTML templates
+    ├── static/
+    │   ├── style.css             # CSS files
+    │   └── script.js             # main JS file
+    │   └── demo.js               # for demo JS graphs
+    │   └── charts.js             # for dynamic chart JS graphs
+    ├── requirements.txt      # Python dependencies
+    └── README.md             # Project documentation
 
-🛠️ Technologies Used
-This project is built with a modern and robust stack:
+**AI Mood Analysis**
 
-Backend: Python, Flask, Werkzeug
+    The AI model reads journal entries and extracts:
+    Primary emotion (happy, sad, angry, etc.)
+    Triggers or key topics
+    Overall mood pattern over time
+    These insights are displayed in the dashboard as interactive charts for easy visualization.
 
-Frontend: HTML, CSS, JavaScript, Jinja2
+**Future Improvements**
 
-Database: SQLite (with the CS50 SQL library)
+    Add emotion-based reminders or notifications.
+    Integrate with mobile apps.
+    Enable exporting journals as PDFs.
+    Add sentiment comparison between entries over weeks/months.
 
-AI / LLM: Llama-3.3-70b via Cerebras API
+**License**
 
-Data Visualization: Chart.js
+    This project is licensed under the MIT License.
 
-Deployment: Docker (optional)
+**Author**
 
-📁 Project Structure
-The project is organized into several key files that separate concerns:
-
-/
-├── app.py              # Main Flask application, handles all routes and logic.
-├── reflection.py       # Contains all functions for AI interaction (reflection & analysis).
-├── helpers.py          # Utility functions (e.g., login_required decorator, hashing).
-├── users.db            # SQLite database file.
-├── requirements.txt    # List of all Python dependencies.
-├── schema.sql          # SQL commands to initialize the database schema.
-│
-├── static/
-│   ├── style.css       # All CSS styles for the application.
-│   └── script.js       # Core JavaScript for UI interactions and API calls.
-│   └── charts.js       # JavaScript for rendering charts on the dashboard.
-│   └── demo.js         # for the demo graphs
-|            
-└── templates/
-    ├── layout.html     # Base HTML template with header and navigation.
-    ├── dashboard.html  # Main dashboard with charts.
-    ├── login.html      # User login page.
-    ├── register.html   # User registration page.
-    ├── space.html      # The diary writing interface.
-    └── ...             # Other HTML files.
-
-⚙️ Getting Started
-To get a local copy up and running, follow these simple steps.
-
-Prerequisites
-Python 3.8+
-
-pip (Python package installer)
-
-Installation & Setup
-Clone the repository:
-
-Bash
-
-git clone https://github.com/your-username/dearDiary.git
-cd dearDiary
-Set up your Cerebras API Key:
-Create a file named .env in the root of the project directory. Add your API key to this file.
-
-CEREBRAS_API_KEY="your-secret-api-key-goes-here"
-The reflection.py file is already configured to load this key.
-
-Create and activate a virtual environment:
-
-Bash
-
-python -m venv venv
-source venv/bin/activate  # On Windows, use: venv\Scripts\activate
-Install Python dependencies:
-
-Bash
-
-pip install -r requirements.txt
-Initialize the database:
-Run the following command in your terminal to create the users.db file and set up all the necessary tables using the schema.sql file.
-
-Bash
-
-sqlite3 users.db < schema.sql
-Running the Application
-Start the Flask server:
-
-Bash
-
-flask run
-Open your browser and navigate to http://127.0.0.1:5000 to see the application in action!
-
-🤝 Contributing
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-
-Fork the Project
-
-Create your Feature Branch (git checkout -b feature/AmazingFeature)
-
-Commit your Changes (git commit -m 'Add some AmazingFeature')
-
-Push to the Branch (git push origin feature/AmazingFeature)
-
-Open a Pull Request
-
-requirements.txt
-Plaintext
-
-Flask
-Flask-Session
-cs50
-Werkzeug
-cerebras-cloud-sdk
-schema.sql
-SQL
-
-CREATE TABLE "users" (
-    "user_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    "email" TEXT NOT NULL UNIQUE,
-    "username" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "status" TEXT DEFAULT 'done'
-);
-
-CREATE TABLE "entries" (
-    "entry_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "entry" TEXT NOT NULL,
-    "written_date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "date_only" DATE DEFAULT (date('now')),
-    FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
-);
-
-CREATE TABLE "analysis" (
-    "analysis_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "analysis" TEXT, -- Storing the JSON as TEXT
-    "date_created" DATE DEFAULT (date('now')),
-    FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
-);
-
-CREATE TABLE "recent_summary" (
-    "summary_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "email" TEXT NOT NULL,
-    "summary" TEXT,
-    "date_summarized" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
-);
+    Krish Bhardwaj
+    Computer Science Engineering Student
+    Passionate about programming, AI, and web development

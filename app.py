@@ -187,7 +187,7 @@ def space():
         user_entry = request.form.get("diary_entry")
         db.execute("INSERT INTO entries (user_id, entry) VALUES (?, ?)", session["user_id"], user_entry)
         # calling the analysis function
-        whole_entry = db.execute("SELECT * FROM entries WHERE user_id = ? AND` entry = ?", session["user_id"], user_entry)
+        whole_entry = db.execute("SELECT * FROM entries WHERE user_id = ? AND entry = ?", session["user_id"], user_entry)
         try:
             print("outside")
             json = analyze(whole_entry, db)
