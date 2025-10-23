@@ -188,9 +188,12 @@ def space():
         db.execute("INSERT INTO entries (user_id, entry) VALUES (?, ?)", session["user_id"], user_entry)
         # calling the analysis function
         whole_entry = db.execute("SELECT * FROM entries WHERE user_id = ? AND entry = ?", session["user_id"], user_entry)
+
         try:
             print("outside")
-            json = analyze(whole_entry, db)
+            # calling the analyze function
+            analyze(whole_entry, db)
+
         except Exception as e:
             print(f"Error running analysis: {e}")
         
@@ -248,14 +251,14 @@ def share():
     else:
         ...
 
-# This is the function to call the control fucntion from reflection.py
+# This is the route to call the control function from reflection.py
 @app.route("/API", methods = ["POST"])
 def call_control():
     # Running if method is post
     if request.method == "POST":
         # Calling control() with error checking
         try:
-            # Getting the body of the JSOn object that was sended 
+            # Getting the body of the JSON object that was sended 
             body = request.get_json()
             # fetching entry text from body
             entry = body.get("entry_text")
@@ -264,8 +267,9 @@ def call_control():
             AI_reflect = control(entry, previous, "llama-3.3-70b", count, db, session["user_id"])
         except Exception as e:
             # returning as a json object
+            print(f"Error running control: {e}")
             return jsonify({
-                "reflection":f"Error running control: {e}"
+                "reflection":f"Problem on our end. Could you please try again later :)"
             }), 500
 
         # modifying the return AI refelction before returning    
@@ -291,16 +295,15 @@ def analysis():
 
     # fetching entries based on the count
     if count >= 3:
-        entries = db.execute("SELECT * FROM analysis WHERE user_id = ? AND date_created >= date('now', 'weekday 0', '-6 days') ORDER BY date_created ASC", session["user_id"])
+        entries = db.execute("SELECT analysis, date_created FROM analysis WHERE user_id = ? AND date_created >= date('now', 'weekday 0', '-6 days') ORDER BY date_created ASC", (session["user_id"]),)
     else:
-        entries = db.execute("SELECT * FROM analysis WHERE user_id = ? ORDER BY date_created DESC LIMIT 7", (session["user_id"]),)
-
+        entries = db.execute("SELECT analysis FROM analysis WHERE user_id = ? ORDER BY date_created DESC LIMIT 7", (session["user_id"]),)
+        
     # now we turn this list into a json
-    json_dict = {f"entry{i+1}": value for i, value in enumerate(entries)}
+    json_dict = {f"entry{i+1}": json.loads(entry['analysis']) for i, entry in enumerate(entries)}
 
-    json_string = json.dumps(json_dict, indent=2)
-    # returning the json_string
-    return json_string
+    # returning the jsonify version
+    return jsonify(json_dict)
 
 # Calling the app.py
 if __name__ == "__main__":

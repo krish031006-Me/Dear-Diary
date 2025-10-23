@@ -10,6 +10,7 @@ import os
 from cerebras.cloud.sdk import Cerebras
 import json
 import re
+import datetime
 
 # the main function to control cerebras_call
 def control(entry, previous, model, count, db, user_id):
@@ -154,7 +155,6 @@ def analyze(whole, db):
         return None
     # the entry text and the date
     entry_text = whole[0]["entry"]
-    date = whole[0]["date_only"]
     user_id = whole[0]["user_id"]
     # the prompt for the AI
     prompt = f"""
@@ -166,6 +166,7 @@ You are a highly specialized AI for mood and sentiment analysis. Your sole purpo
 2.  The JSON object must strictly adhere to the schema and keys provided below.
 3.  If you cannot confidently determine a field, use the specified default values ("neutral" or 0).
 4.  Base your analysis exclusively on the text provided in the diary entry.
+5. Analyze the following diary entry. Return ONLY the valid JSON object as instructed.
 
 **JSON Schema:**
 {{
@@ -175,9 +176,6 @@ You are a highly specialized AI for mood and sentiment analysis. Your sole purpo
   "energy_level": "low | medium | high | neutral"
 }}
 <</SYS>>
-
-[INST]
-Analyze the following diary entry. Return ONLY the valid JSON object as instructed.
 
 **Diary entry:**
 "What a fantastic day! I finally got the promotion I've been working so hard for. I feel like I'm on top of the world. Celebrated with friends tonight, just pure joy."
@@ -212,17 +210,31 @@ Analyze the following diary entry. Return ONLY the valid JSON object as instruct
     # Fetching the result from completion
     try: 
         # Extract and strip the final generated text
-        generated_json = completion.choices[0].text.strip()  
+        raw_text = completion.choices[0].text.strip()  
         
-        # now trying to clean this string
-        if '}' in raw_text:
-            raw_text = raw_text[:raw_text.rfind('}')+1]
-        else:
-            return None
-        data = json.loads(raw_text)
+        # printing for error checking
+        print("THis is the raw_text: " + "/n" + raw_text)
+
+        # now trying to clean this raw_text from Aura
+        valid_part = raw_text[:raw_text.find('}')+1]
+        clean = re.search(r'\{.*\}', valid_part, re.DOTALL)
+        cleaned = clean[0] if clean else None
+
+        # Parsing the json
+        data = json.loads(cleaned)
+        # a bit of error checking
         print(f"ANALYSIS:{data}")
+
+        # adding today's date into the analysis text
+        date = datetime.date.today()
+        data["date_created"] = date.isoformat()
+
+        # converting to a string to store in databse
+        storage_ready = json.dumps(data)
+
         # appending in table
-        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, data) 
+        db.execute("INSERT INTO analysis(user_id, analysis) VALUES(?, ?)", user_id, storage_ready) 
+
     except Exception as e:
         # returning
         print(f"Error extracting text from analysis: {e}")
