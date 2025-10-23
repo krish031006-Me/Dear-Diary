@@ -1,7 +1,7 @@
 // charts.js – scroll-triggered version
 document.addEventListener("DOMContentLoaded", async function () {
     const analysisData = await getAnalysis();
-
+    console.log(analysisData);
     if (analysisData && analysisData.length > 0) {
         console.log("✅ Data ready for charts:", analysisData);
 
@@ -23,14 +23,7 @@ async function getAnalysis() {
         const rawData = await response.json();
 
         const entries = Object.values(rawData);
-        return entries.map(entry => {
-            try {
-                return { ...entry, parsed: JSON.parse(entry.analysis) };
-            } catch (err) {
-                console.error("Failed to parse analysis for entry:", entry, err);
-                return { ...entry, parsed: {} };
-            }
-        });
+        return entries;
     } catch (error) {
         console.error("Fetch Error:", error);
         return [];
@@ -64,7 +57,7 @@ function line(data) {
                 labels: data.map(entry => entry.date_created),
                 datasets: [{
                     label: "Your emotion intensity score",
-                    data: data.map(entry => entry.parsed.emotion_intensity || 0),
+                    data: data.map(entry => entry.emotion_intensity || 0),
                     borderColor: 'blue',
                     backgroundColor: 'rgba(0, 0, 255, 0.2)',
                     tension: 0.3
@@ -91,7 +84,7 @@ function bar(data) {
                 datasets: [{
                     label: "Entries per emotion",
                     data: emotions.map(emotion =>
-                        data.filter(entry => entry.parsed.primary_emotion === emotion).length
+                        data.filter(entry => entry.primary_emotion === emotion).length
                     ),
                     backgroundColor: ['#FFD700', '#1E90FF', '#FF4500', '#32CD32', '#FFA500', '#808080', '#FF69B4']
                 }]
@@ -117,7 +110,7 @@ function doughnut(data) {
                 datasets: [{
                     label: "Proportions of emotions",
                     data: emotions.map(emotion =>
-                        data.filter(entry => entry.parsed.primary_emotion === emotion).length
+                        data.filter(entry => entry.primary_emotion === emotion).length
                     ),
                     backgroundColor: ['#FFD700', '#1E90FF', '#FF4500', '#32CD32', '#FFA500', '#808080', '#FF69B4'],
                     borderWidth: 1
