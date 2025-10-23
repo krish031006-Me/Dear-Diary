@@ -39,7 +39,7 @@ Dear Diary is a personal journaling web application that helps users track their
 
 3. **Run the app**
     ```bash
-    flask run
+    python app.py
     ```
     Open http://127.0.0.1:5000 in your browser.
 
@@ -61,6 +61,7 @@ Dear Diary is a personal journaling web application that helps users track their
     │   └── script.js             # main JS file
     │   └── demo.js               # for demo JS graphs
     │   └── charts.js             # for dynamic chart JS graphs
+    │   └── mot.jpeg              # for dynamic chart JS graphs
     ├── requirements.txt      # Python dependencies
     └── README.md             # Project documentation
 
@@ -78,6 +79,7 @@ Dear Diary is a personal journaling web application that helps users track their
     Integrate with mobile apps.
     Enable exporting journals as PDFs.
     Add sentiment comparison between entries over weeks/months.
+    Share the diaries with other user.
 
 **License**
 
@@ -85,6 +87,6 @@ Dear Diary is a personal journaling web application that helps users track their
 
 **Author**
 
-    Krish Bhardwaj
+    Code Catalysts ~ Krish, Sahil, Hardik
     Computer Science Engineering Student
     Passionate about programming, AI, and web development
